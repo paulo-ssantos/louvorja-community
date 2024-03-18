@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.4.0",
+    "@nuxtjs/supabase": "^1.1.7",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@vercel/analytics": "^1.2.2",
     "@vueuse/nuxt": "^10.9.0",
@@ -21,7 +22,6 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@nuxtjs/supabase": "^1.1.7",
     "nuxt-icon": "^0.6.9",
     "nuxt-typed-router": "^3.6.1"
   }

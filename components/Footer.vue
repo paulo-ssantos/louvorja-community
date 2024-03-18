@@ -3,8 +3,7 @@
     class="bg-color-background-nav p-3 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.3)]"
   >
     <div
-      shadow-[0px_0px_35px_rgb(var(--color-primary-generic))]
-      shadow1-[50px_25px_0px_-12px]
+      
       class="w-full max-w-screen-xl mx-auto p-4 md:py-8 flex flex-col justify-center align-middle text-center"
     >
       <div class="flex justify-center mb-2">

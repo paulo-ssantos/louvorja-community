@@ -13,4 +13,11 @@ export default defineNuxtConfig({
 
   plugins: ["~/plugins/flowbiteInjection.ts"],
 
+  runtimeConfig: {
+    public: {
+      SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
+      APP_URL: process.env.VERCEL_URL,
+    },
+  },
+
 });

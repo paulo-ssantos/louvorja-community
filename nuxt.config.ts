@@ -9,16 +9,8 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "nuxt-typed-router",
     "@nuxtjs/tailwindcss",
-    "@nuxtjs/supabase",
   ],
 
   plugins: ["~/plugins/flowbiteInjection.ts"],
 
-  supabase:{
-    redirectOptions: {
-      login: "/login",
-      callback: "/",
-      exclude: ["/explore", "/collections", "/about", "/register"],
-    },
-  }
 });

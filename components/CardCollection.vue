@@ -268,7 +268,7 @@
 </template>
 
 <script setup lang="ts">
-const supabase = useSupabaseClient();
+const supabase = supabaseClientUtils();
 import { useRouter } from "vue-router";
 
 // const collectiosType = {

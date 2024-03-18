@@ -91,6 +91,16 @@
       @apply max-md:mx-6;
     }
 
+    .section-container-swiper {
+      @apply container;
+      @apply text-center;
+      @apply mx-16;
+      @apply py-16;
+      /* @apply w-4/5; */
+      @apply max-w-fit;
+      @apply max-md:mx-6;
+    }
+
     .section-container-divided {
       @apply container;
       @apply gap-8;

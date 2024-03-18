@@ -44,7 +44,7 @@
               active-class="text-primary-500 font-medium"
             >
               <div class="iconContainer flex items-center md:hidden mr-1">
-                <Icon name="mdi:eye-check" size="1.25em" />
+                <Icon name="mdi:semantic-web" size="1.25em" />
               </div>
               Explorar
             </NuxtLink>
@@ -57,7 +57,7 @@
               active-class="text-primary-500 font-medium"
             >
               <div class="iconContainer flex items-center md:hidden mr-1">
-                <Icon name="mdi:eye-check" size="1.25em" />
+                <Icon name="mdi:music" size="1.25em" />
               </div>
               Coletâneas
             </NuxtLink>

@@ -1,7 +1,7 @@
 <template>
   <section id="faq" :class="colorBackground">
     <div class="section-container min-w-full">
-      <h2 class="mb-8 text-4xl tracking-tight font-extrabold text-color-text">
+      <h2 class="mb-8 text-4xl tracking-tight font-extrabold text-color-text w-4/5">
         Perguntas Frequentes
       </h2>
 

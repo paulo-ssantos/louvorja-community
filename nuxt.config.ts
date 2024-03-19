@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "nuxt-typed-router",
     "@nuxtjs/tailwindcss",
+    '@pinia/nuxt'
   ],
 
   plugins: ["~/plugins/flowbiteInjection.ts"],
@@ -18,6 +19,10 @@ export default defineNuxtConfig({
       SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
       APP_URL: process.env.VERCEL_URL,
     },
+  },
+
+  pinia: {
+    storesDirs: ['./stores/**'],
   },
 
 });

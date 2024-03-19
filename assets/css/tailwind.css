@@ -86,8 +86,23 @@
       @apply text-center;
       @apply mx-16;
       @apply py-16;
-      @apply w-4/5;
+      @apply w-full;
       @apply max-w-fit;
+      @apply max-md:mx-6;
+    }
+
+    .section-container-account {
+      @apply container;
+      @apply flex;
+      @apply flex-col;
+      @apply justify-center;
+      @apply items-center;
+      @apply text-center;
+      @apply mx-16;
+      @apply py-16;
+      @apply w-4/5;
+      @apply h-full;
+      /* @apply max-w-fit; */
       @apply max-md:mx-6;
     }
 

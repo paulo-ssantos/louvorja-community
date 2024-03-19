@@ -3,8 +3,8 @@
     <div class="lg:px-6 py-8 px-4 mx-auto max-w-2xl lg:py-16 flex flex-col">
       <PageHeader
         id="page-header"
-        pageTitle="Adicionar Nova Música"
-        pageDescription="Envie uma nova música para a comunidade."
+        pageTitle="Atualizar Música"
+        pageDescription="Edite e atualize música para a comunidade."
       />
 
       <div class="alerts">
@@ -26,8 +26,8 @@
           </svg>
           <span class="sr-only">Info</span>
           <div>
-            <span class="font-medium">Coletânea Enviada Com Sucesso!</span> Já
-            disponível para uso.
+            <span class="font-medium">Coletânea Atualizada Com Sucesso!</span>
+            Já disponível para uso.
           </div>
         </div>
 
@@ -67,8 +67,8 @@
               type="text"
               name="name"
               id="name"
-              v-model="name"
               :on-change="setTitle()"
+              v-model="name"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nosso Maravilhoso Deus"
               required="true"
@@ -157,57 +157,95 @@
             </select>
           </div>
 
-          <div class="col-span-2">
-            <label
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="file_input"
-              >Upload Arquivo SLJA</label
+          <div
+            id="accordion-collapse"
+            class="col-span-2 mb-4"
+            data-accordion="collapse"
+          >
+            <h2 id="accordion-collapse-heading">
+              <button
+                type="button"
+                class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3 rounded-lg"
+                data-accordion-target="#accordion-collapse-body"
+                aria-expanded="false"
+                aria-controls="accordion-collapse-body"
+              >
+                <span>Atualizar os Arquivos?</span>
+                <svg
+                  data-accordion-icon
+                  class="w-3 h-3 rotate-180 shrink-0"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5 5 1 1 5"
+                  />
+                </svg>
+              </button>
+            </h2>
+            <div
+              id="accordion-collapse-body"
+              class="hidden"
+              aria-labelledby="accordion-collapse-heading"
             >
-            <input
-              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              aria-describedby="file_input_help"
-              id="file_input"
-              name="file_input"
-              type="file"
-              accept=".slja"
-              required="true"
-            />
-            <p
-              class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-              id="file_input_help"
-            >
-              Apenas arquivo .slja é aceito.
-            </p>
-          </div>
+              <div class="col-span-2 mt-6">
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="file_input"
+                  >Upload Arquivo SLJA</label
+                >
+                <input
+                  class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  aria-describedby="file_input_help"
+                  id="file_input"
+                  name="file_input"
+                  type="file"
+                  accept=".slja"
+                />
+                <p
+                  class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                  id="file_input_help"
+                >
+                  Apenas arquivo .slja é aceito.
+                </p>
+              </div>
 
-          <div class="col-span-2">
-            <label
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="file_input"
-              >Upload Capa da Coletânea</label
-            >
-            <input
-              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              aria-describedby="file_input_help"
-              id="file_input_cover"
-              name="file_input_cover"
-              type="file"
-              accept="image/bmp"
-            />
-            <p
-              class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-              id="file_input_help"
-            >
-              Apenas de imagem .bmp é aceito.
-            </p>
+              <div class="col-span-2 mt-6">
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="file_input"
+                  >Upload Capa da Coletânea</label
+                >
+                <input
+                  class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  aria-describedby="file_input_help"
+                  id="file_input_cover"
+                  name="file_input_cover"
+                  type="file"
+                  accept="image/bmp"
+                />
+                <p
+                  class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                  id="file_input_help"
+                >
+                  Apenas de imagem .bmp é aceito.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <button
           type="submit"
           class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-          @click="addNewCollection"
+          @click="updateNewCollection"
         >
-          Adiconar Música
+          Atualizar Música
         </button>
       </form>
     </div>
@@ -220,25 +258,32 @@ definePageMeta({
 });
 
 import {
+  retriveCollectionInfoByRef,
   retrieveCollectionsCategory,
-  insertNewCollection,
-  insertNewCollectionFiles,
+  updateCollectionInfo,
+  updateCollectionSljaFile,
+  updateCollectionThumbFile,
   retriveAllCollectionsInfo,
 } from "~/services/collectionServices";
 
 import { getCurrentUser } from "~/services/accountServices";
 
-const collectionStatus = ref("draft");
-const collectionErrorMessage = ref("");
+const route = useRoute();
+
+const collectionRef = route.query.ref as string;
+const collectionInfo = await retriveCollectionInfoByRef(collectionRef);
 const collectionCategories = ref(await retrieveCollectionsCategory());
 
-const name = ref("");
-const description = ref(null);
-const category = ref("");
-const mediaType = ref("");
-const mainVersion = ref(null);
+const collectionStatus = ref("draft");
+const collectionErrorMessage = ref("");
 
-const imageRef = imageRefGenerate();
+const name = ref(collectionInfo.msc_name);
+const description = ref(collectionInfo.msc_description);
+const category = ref(collectionInfo.msc_category);
+const mediaType = ref(collectionInfo.msc_meta.media);
+const mainVersion = ref(collectionInfo.msc_main_ref);
+
+const imageRef = collectionInfo.msc_files_ref;
 
 const user = await getCurrentUser();
 const username =
@@ -250,7 +295,7 @@ const collectionsListFiltered = collectionsList.filter(
   (collection: any) => collection.collectionInfo.msc_main_ref == null
 );
 
-const addNewCollection = async () => {
+const updateNewCollection = async () => {
   collectionStatus.value = "loading";
   collectionErrorMessage.value = "";
 
@@ -274,13 +319,6 @@ const addNewCollection = async () => {
       .toLowerCase()
       .replace(/ /g, "-");
 
-  if (await checkIntegrity(collectionIntegrity, collectionsList)) {
-    collectionStatus.value = "error";
-    collectionErrorMessage.value = "Essa música já existe na base de dados.";
-    headerElement.scrollIntoView();
-    return;
-  }
-
   const collectionInfo = {
     name: name.value,
     description: description.value,
@@ -290,42 +328,31 @@ const addNewCollection = async () => {
       username: username,
       integrity: collectionIntegrity,
     },
-    main_ref: mainVersion.value == "null" ? null : mainVersion.value,
+    main_ref: mainVersion.value,
     files_ref: imageRef,
   };
 
-  const collectionInsert = await insertNewCollection(collectionInfo);
+  const collectionUpdate = await updateCollectionInfo(collectionInfo);
 
-  let collectionFileInsert = null;
-
-  if (collectionInsert.data) {
+  if (collectionUpdate.data) {
     if (checkFile(fileInputElement)) {
-      let fileInput =
-        fileInputElement.files != null ? fileInputElement.files[0] : null;
-      if (checkFile(fileInputCoverElement)) {
-        let fileInputCover =
-          fileInputCoverElement.files != null
-            ? fileInputCoverElement.files[0]
-            : null;
+      await updateCollectionSljaFile(
+        collectionInfo,
+        fileInputElement.files != null ? fileInputElement.files[0] : null
+      );
+    }
 
-        collectionFileInsert = await insertNewCollectionFiles(
-          collectionInfo,
-          fileInput,
-          fileInputCover
-        );
-      } else {
-        collectionFileInsert = await insertNewCollectionFiles(
-          collectionInfo,
-          fileInput
-        );
-      }
+    if (checkFile(fileInputCoverElement)) {
+      await updateCollectionThumbFile(
+        collectionInfo,
+        fileInputCoverElement.files != null
+          ? fileInputCoverElement.files[0]
+          : null
+      );
     }
   }
 
-  if (
-    (await collectionInsert.data) &&
-    (await collectionFileInsert.sljaFileResponse.data)
-  ) {
+  if (await collectionUpdate.data) {
     form.reset();
     collectionStatus.value = "success";
     headerElement.scrollIntoView();
@@ -347,20 +374,11 @@ const checkFile = (file: HTMLInputElement) => {
   return true;
 };
 
-const checkIntegrity = async (integrity: string, collectionsList: any) => {
-  const integrityCheck = collectionsList.filter(
-    (collection: any) =>
-      collection.collectionInfo.msc_meta.integrity == integrity
-  );
-
-  return integrityCheck.length > 0 ? true : false;
-};
-
 const setTitle = () => {
   useSeoMeta({
-    title: `Enviando ${name.value == "" ? "Nova Música" : name.value}`,
+    title: `Editando ${name.value == "" ? "Música" : name.value}`,
     description: "Edite e atualize música para a comunidade.",
-    ogTitle: `Enviando ${name.value == "" ? "Nova Música" : name.value}`,
+    ogTitle: `Editando ${name.value == "" ? "Música" : name.value}`,
     ogDescription: "Edite e atualize música para a comunidade.",
   });
 };

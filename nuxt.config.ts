@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       SUPPORT_EMAIL: process.env.SUPPORT_EMAIL,
-      APP_URL: process.env.VERCEL_URL,
+      APP_URL: process.env.WEBSITE_URL,
     },
   },
 
@@ -27,13 +27,13 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: process.env.VERCEL_URL,
+    url: process.env.WEBSITE_URL,
     name: "Louvor JA Community",
     description: "LJA Community é um projeto independente criado para facilitar o compartilhamento de coletâneas personalizadas do Louvor JA.",
     defaultLocale: "pt-BR",
-    ogImage: `${process.env.VERCEL_URL}/images/seo/card.jpg`,
+    ogImage: `${process.env.WEBSITE_URL}/images/seo/card.jpg`,
     ogImageAlt: 'Louvor JA Community',
-    ogUrl: process.env.VERCEL_URL,
+    ogUrl: process.env.WEBSITE_URL,
   },
 
 });

@@ -1,5 +1,6 @@
 <template>
   <footer
+  v-if="!fullPage"
     class="bg-color-background-nav p-3 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.3)]"
   >
     <div
@@ -88,6 +89,20 @@
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const route = useRoute();
+const router = useRouter();
+
+
+const fullPage = ref(route.meta.fullPage || false);
+
+router.beforeEach((to, from) => {
+  if (to.meta.fullPage) {
+    fullPage.value = true;
+  } else {
+    fullPage.value = false;
+  }
+});
+</script>
 
 <style scoped></style>

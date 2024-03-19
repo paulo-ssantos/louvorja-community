@@ -23,6 +23,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@nuxtjs/seo": "^2.0.0-rc.9",
     "nuxt-icon": "^0.6.9",
     "nuxt-typed-router": "^3.6.1"
   }

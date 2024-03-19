@@ -100,10 +100,8 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: "Entrar",
-  description: "Acesse para entrar na sua conta.",
-  ogTitle: "Entrar",
-  ogDescription: "Acesse para entrar na sua conta.",
+  title: "Registro",
+  description: "Acesse para registrar uma nova conta.",
 });
 
 definePageMeta({

@@ -334,6 +334,11 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: `Minhas Contribuições`,
+  description: "Gerencie suas contribuições para com a comunidade.",
+});
+
 definePageMeta({
   middleware: ["auth"],
 });

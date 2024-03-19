@@ -110,8 +110,6 @@
 useSeoMeta({
   title: "Entrar",
   description: "Acesse para entrar na sua conta.",
-  ogTitle: "Entrar",
-  ogDescription: "Acesse para entrar na sua conta.",
 });
 
 definePageMeta({

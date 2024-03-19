@@ -59,6 +59,11 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: "Recuperar a Conta",
+  description: "Recupere sua conta do Louvor JA Community.",
+})
+
 definePageMeta({
   fullPage: true,
 });

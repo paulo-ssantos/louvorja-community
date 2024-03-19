@@ -76,6 +76,12 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: `Coletâneas`,
+  description: "Encontre todas as coleções, enviadas pela comunidade do Louvor JA, disponíveis para download.",
+});
+
+
 import { retriveAllCollectionsInfo } from "~/services/collectionServices";
 
 let collectionsListOrigin = await retriveAllCollectionsInfo();

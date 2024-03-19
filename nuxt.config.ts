@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "nuxt-typed-router",
     "@nuxtjs/tailwindcss",
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/seo'
   ],
 
   plugins: ["~/plugins/flowbiteInjection.ts"],
@@ -23,6 +24,16 @@ export default defineNuxtConfig({
 
   pinia: {
     storesDirs: ['./stores/**'],
+  },
+
+  site: {
+    url: process.env.VERCEL_URL,
+    name: "Louvor JA Community",
+    description: "LJA Community é um projeto independente criado para facilitar o compartilhamento de coletâneas personalizadas do Louvor JA.",
+    defaultLocale: "pt-BR",
+    ogImage: `${process.env.VERCEL_URL}/images/seo/card.jpg`,
+    ogImageAlt: 'Louvor JA Community',
+    ogUrl: process.env.VERCEL_URL,
   },
 
 });

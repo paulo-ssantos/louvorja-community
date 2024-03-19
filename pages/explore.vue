@@ -63,6 +63,12 @@
 </template>
 
 <script setup>
+
+useSeoMeta({
+  title: "Explorar",
+  description: "Aqui você encontra ferramentas que podem te ajudar no seu dia a dia.",
+})
+
 import { retriveAllToolsWithCategory } from "~/services/toolsServices";
 
 const tools = await retriveAllToolsWithCategory();

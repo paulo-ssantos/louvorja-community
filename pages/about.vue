@@ -174,8 +174,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-
+useSeoMeta({
+  title: 'Sobre',
+  description: 'Saiba mais sobre esse projeto, como ele funciona e como você pode contribuir.',
+})
 const runtimeConfig = useRuntimeConfig();
 
 const subject = ref("");

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Banner :main-text="mainText" />
     <NuxtLoadingIndicator />
 
     <NavBar />
@@ -17,9 +18,16 @@ useHead({
   },
 });
 
-// useSeoMeta({
-//   titleTemplate: (title) =>
-//     title ? `${title} | DynaQR` : "DynaQR | Powering Apps",
-//   ogImage: "/og/default.jpg",
-// });
+useSeoMeta({
+  ogImage: "/images/seo/card.jpg",
+  ogImageAlt: "Louvor JA Community",
+  ogImageHeight: 630,
+  ogImageWidth: 1200,
+  titleTemplate: (title) =>
+    title ? `${title} | LJA Community` : "Louvor JA Community",
+});
+
+const mainText = ref(
+  "O aplicativo ainda está em desenvolvimento, podem ocorrer alguns erros."
+);
 </script>

@@ -270,7 +270,19 @@
 </template>
 
 <script setup lang="ts">
-const loggedUser = null;
+useSeoMeta({
+  title: null,
+  description:
+    "Ferramentas e coletâneas personalizadas do Louvor JA, para facilitar rotina na mídia da igreja.",
+});
+
+const accountStore = useAccountStore();
+
+const loggedUser = ref((await accountStore.session) != null);
+
+watchEffect(() => {
+  loggedUser.value = accountStore.session != null;
+});
 </script>
 
 <style scoped></style>

@@ -91,7 +91,7 @@ export const retriveCollectionInfoFromUser = async (): Promise<any[]> => {
       .eq("msc_user_id", userId as string);
 
     if (userId == null || collectionInfo.data.length == 0) {
-      return collectionInfoList;
+      continue
     }
 
     let imagePublicLink;
@@ -242,7 +242,7 @@ export const retriveAllCollectionsInfo = async (): Promise<any[]> => {
       imagePublicLink = false;
     }
 
-    if (collectionInfo.data) {
+    if (collectionInfo.data && collectionInfo.data.length > 0) {
       collectionInfoList.push({
         collectionTitle: collectionInfo.data[0].msc_name,
         collectionDescription: collectionInfo.data[0].msc_description,
@@ -332,11 +332,11 @@ export const deleteCollectionByRef = async (
   const collectionInfo = await retriveCollectionInfoByRef(collectionRef);
 
   // Delete collection info from database
-  const { data, error } = await supabase
+  const response = await supabase
     .from("msc_music")
     .delete()
     .eq("msc_files_ref", collectionRef);
-
+    
   // Delete collection files from storage
   await supabase.storage
     .from("slja")
@@ -346,5 +346,5 @@ export const deleteCollectionByRef = async (
     .from("image")
     .remove([`slja-thumb/${collectionRef}.bmp`]);
 
-  return { data: data, error: error };
+  return { error: response.error };
 };

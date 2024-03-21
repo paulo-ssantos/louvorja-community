@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-6 bg-color-background-alternative rounded-lg border border-color-primary-generic-inverse-alternative shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all"
+    class="p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all"
   >
     <div
       class="flex justify-between items-center mb-5 text-color-text-muted-75"
@@ -48,6 +48,13 @@
           class="w-20 h-20 rounded-md object-cover"
         />
       </div>
+      <div v-else="collectionImage" class="card-img mr-4">
+        <div
+          class="w-20 h-20 rounded-md"
+        >
+      <Icon name="mdi:image-off-outline" class="w-20 h-20 text-color-primary-generic-alternative" />
+      </div> 
+      </div>
       <div class="card-info">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-color-text">
           <div class="cursor-pointer">
@@ -55,7 +62,7 @@
           </div>
         </h2>
         <p class="mb-5 font-light text-color-text-muted-75">
-          {{ collectionDescription }}
+          {{ collectionDescription || "Sem descrição"}}
         </p>
       </div>
     </div>

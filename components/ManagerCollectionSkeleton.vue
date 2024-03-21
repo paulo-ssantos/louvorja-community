@@ -21,8 +21,6 @@
 
       <button
         type="button"
-        data-modal-target="deleteModal"
-        data-modal-toggle="deleteModal"
         class="flex w-full justify-center items-center py-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400"
       ></button>
     </td>

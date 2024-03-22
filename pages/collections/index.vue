@@ -7,6 +7,13 @@
       />
 
       <!-- Init Fiter -->
+      <Alerts
+          :collectionStatus="alertStatus"
+          :collectionMainMessage="alertMainMessage || undefined"
+          :collectionAdditionalMessage="
+            alertAdditionalMessage || undefined
+          "
+        />
 
       <div
         class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 mb-4 py-4 border-t w-full"
@@ -39,6 +46,15 @@
             <Icon name="mdi:reload" class="mr-1 w-4 h-4" />
 
             Recarregar
+          </button>
+
+          <button
+            type="button"
+            v-if="seachCollection"
+            class="flex items-center justify-center text-color-text-inverse bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 ml-2"
+            @click="copySharedLink(seachCollection)"
+          >
+            <Icon name="mdi:clipboard-search-outline" class="mr-1 w-4 h-4" />
           </button>
         </div>
         <div
@@ -78,22 +94,31 @@
 <script setup lang="ts">
 useSeoMeta({
   title: `Coletâneas`,
-  description: "Encontre todas as coleções, enviadas pela comunidade do Louvor JA, disponíveis para download.",
+  description:
+    "Encontre todas as coleções, enviadas pela comunidade do Louvor JA, disponíveis para download.",
 });
-
 
 import { retriveAllCollectionsInfo } from "~/services/collectionServices";
 
 let collectionsListOrigin = await retriveAllCollectionsInfo();
 
+const route = useRoute();
+
 const collectionsList = ref(collectionsListOrigin);
-const seachCollection = ref("");
+const seachCollection = ref(route.query.search as string || "");
+
 
 const searchCollections = () => {
   collectionsList.value = collectionsListOrigin.filter((collection) => {
-    return collection.collectionTitle
+    let titleFilter = collection.collectionTitle
       .toLowerCase()
       .includes(seachCollection.value.toLowerCase());
+
+    let descriptionFilter = collection.collectionDescription
+      .toLowerCase()
+      .includes(seachCollection.value.toLowerCase());
+
+    return titleFilter || descriptionFilter;
   });
 
   if (seachCollection.value === "") {
@@ -101,7 +126,30 @@ const searchCollections = () => {
   }
 };
 
+if (seachCollection.value) {
+  searchCollections();
+}
+
 watch(seachCollection, searchCollections);
+
+const alertStatus = ref("");
+const alertMainMessage = ref("");
+const alertAdditionalMessage = ref("");
+
+const copySharedLink = (seachCollection: string) => {
+  const url = encodeURI(`${window.location.origin}/collections?search=${seachCollection}`);
+  navigator.clipboard.writeText(url);
+
+  alertStatus.value = "success";
+  alertMainMessage.value = "Link copiado!";
+  alertAdditionalMessage.value = "O link foi copiado para a área de transferência.";
+
+  setTimeout(() => {
+    alertStatus.value = "";
+    alertMainMessage.value = "";
+    alertAdditionalMessage.value = "";
+  }, 3000);
+};
 
 const refreshCollections = async () => {
   collectionsListOrigin = await retriveAllCollectionsInfo();

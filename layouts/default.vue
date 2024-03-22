@@ -19,7 +19,7 @@ useHead({
 });
 
 useSeoMeta({
-  ogImage: "/images/seo/card.jpg",
+  ogImage: "/images/seo/card-light.jpg",
   ogImageAlt: "Louvor JA Community",
   ogImageHeight: 630,
   ogImageWidth: 1200,

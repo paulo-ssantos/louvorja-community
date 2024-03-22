@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     name: "Louvor JA Community",
     description: "LJA Community é um projeto independente criado para facilitar o compartilhamento de coletâneas personalizadas do Louvor JA.",
     defaultLocale: "pt-BR",
-    ogImage: `${process.env.WEBSITE_URL}/images/seo/card.jpg`,
+    ogImage: `${process.env.WEBSITE_URL}/images/seo/card-light.jpg`,
     ogImageAlt: 'Louvor JA Community',
     ogUrl: process.env.WEBSITE_URL,
   },

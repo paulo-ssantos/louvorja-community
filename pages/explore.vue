@@ -88,6 +88,8 @@ categories.forEach((category) => {
   }
 });
 
+uniqueCategories.sort((a, b) => a.tct_order - b.tct_order);
+
 const toolsByCategory = uniqueCategories.map((category) => {
   const toolsPerCategory = tools.filter(
     (tool) => tool.too_category.tct_id === category.tct_id

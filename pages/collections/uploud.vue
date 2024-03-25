@@ -215,7 +215,6 @@
 </template>
 
 <script setup lang="ts">
-
 definePageMeta({
   middleware: ["auth"],
 });
@@ -230,6 +229,7 @@ import {
 import { getCurrentUser } from "~/services/accountServices";
 
 const collectionStatus = ref("draft");
+const collectionThumbStatus = ref("");
 const collectionErrorMessage = ref("");
 const collectionCategories = ref(await retrieveCollectionsCategory());
 
@@ -251,9 +251,19 @@ const collectionsListFiltered = collectionsList.filter(
   (collection: any) => collection.collectionInfo.msc_main_ref == null
 );
 
+onMounted(() => {
+  const fileInputCoverElement = document.getElementById(
+    "file_input_cover"
+  ) as HTMLInputElement;
+
+  fileInputCoverElement.addEventListener("change", () => {
+    checkThumbFile(fileInputCoverElement);
+  });
+});
+
 const addNewCollection = async () => {
-  collectionStatus.value = "loading";
-  collectionErrorMessage.value = "";
+  collectionStatus.value = collectionThumbStatus.value == "" ? "loading" : "error";
+  collectionErrorMessage.value = collectionThumbStatus.value == "" ? "" : collectionErrorMessage.value;
 
   const form = document.getElementById("collection-form") as HTMLFormElement;
   form.addEventListener("submit", (e) => {
@@ -295,47 +305,52 @@ const addNewCollection = async () => {
     files_ref: imageRef,
   };
 
-  const collectionInsert = await insertNewCollection(collectionInfo);
+  if (collectionThumbStatus.value != "error") {
+    console.log(collectionStatus.value);
+    const collectionInsert = await insertNewCollection(collectionInfo);
 
-  let collectionFileInsert = null;
+    let collectionFileInsert = null;
 
-  if (collectionInsert.data) {
-    if (checkFile(fileInputElement)) {
-      let fileInput =
-        fileInputElement.files != null ? fileInputElement.files[0] : null;
-      if (checkFile(fileInputCoverElement)) {
-        let fileInputCover =
-          fileInputCoverElement.files != null
-            ? fileInputCoverElement.files[0]
-            : null;
+    if (collectionInsert.data) {
+      if (checkFile(fileInputElement)) {
+        let fileInput =
+          fileInputElement.files != null ? fileInputElement.files[0] : null;
+        if (checkFile(fileInputCoverElement)) {
+          let fileInputCover =
+            fileInputCoverElement.files != null
+              ? fileInputCoverElement.files[0]
+              : null;
 
-        collectionFileInsert = await insertNewCollectionFiles(
-          collectionInfo,
-          fileInput,
-          fileInputCover
-        );
-      } else {
-        collectionFileInsert = await insertNewCollectionFiles(
-          collectionInfo,
-          fileInput
-        );
+          collectionFileInsert = await insertNewCollectionFiles(
+            collectionInfo,
+            fileInput,
+            fileInputCover
+          );
+        } else {
+          collectionFileInsert = await insertNewCollectionFiles(
+            collectionInfo,
+            fileInput
+          );
+        }
       }
     }
-  }
 
-  if (
-    (await collectionInsert.data) &&
-    (await collectionFileInsert.sljaFileResponse.data)
-  ) {
-    form.reset();
-    collectionStatus.value = "success";
-    headerElement.scrollIntoView();
+    if (
+      (await collectionInsert.data) &&
+      (await collectionFileInsert.sljaFileResponse.data)
+    ) {
+      form.reset();
+      collectionStatus.value = "success";
+      headerElement.scrollIntoView();
+    } else {
+      collectionStatus.value = "error";
+      collectionErrorMessage.value =
+        collectionErrorMessage.value == ""
+          ? "Verifique as informações inseridas."
+          : collectionErrorMessage.value;
+      headerElement.scrollIntoView();
+    }
   } else {
-    collectionStatus.value = "error";
-    collectionErrorMessage.value =
-      collectionErrorMessage.value == ""
-        ? "Verifique as informações inseridas."
-        : collectionErrorMessage.value;
     headerElement.scrollIntoView();
   }
 };
@@ -343,6 +358,48 @@ const addNewCollection = async () => {
 const checkFile = (file: HTMLInputElement) => {
   if (file.files != null && file.files.length == 0) {
     return false;
+  }
+
+  return true;
+};
+
+const checkSLJAFile = (file: HTMLInputElement) => {
+  if (file.files != null && file.files.length == 0) {
+    return false;
+  }
+
+  return true;
+};
+
+const checkThumbFile = (file: HTMLInputElement) => {
+  const headerElement = document.getElementById("page-header") as HTMLElement;
+
+  if (file.files != null && file.files.length == 0) {
+    return false;
+  }
+
+  // verificar dimensão da imagem bmp é igual a 137x137
+  if (file.files != null) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file.files[0]);
+    reader.onload = (e) => {
+      const image = new Image();
+      image.src = e.target?.result as string;
+      image.onload = () => {
+        if (image.width != 137 || image.height != 137) {
+          collectionStatus.value = "error";
+          collectionThumbStatus.value = "error";
+          collectionErrorMessage.value = "A imagem deve ser 137x137 pixels.";
+          headerElement.scrollIntoView();
+
+          return false;
+        } else {
+          collectionStatus.value = "draft";
+          collectionThumbStatus.value = "";
+          collectionErrorMessage.value = "";
+        }
+      };
+    };
   }
 
   return true;

@@ -41,11 +41,11 @@
       }}</span>
     </div>
     <div class="flex">
-      <div v-if="collectionImage" class="card-img mr-4">
+      <div v-if="collectionImage" class="card-img mr-4 w-1/6">
         <img
           :src="collectionImage"
           :alt="collectionTitle"
-          class="w-20 h-20 rounded-md object-cover"
+          class="rounded-md object-cover"
         />
       </div>
       <div v-else="collectionImage" class="card-img mr-4">
@@ -55,7 +55,7 @@
       <Icon name="mdi:image-off-outline" class="w-20 h-20 text-color-primary-generic-alternative" />
       </div> 
       </div>
-      <div class="card-info">
+      <div class="card-info text-left w-5/6">
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-color-text">
           <div class="cursor-pointer">
             {{ collectionTitle }}

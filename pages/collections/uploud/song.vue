@@ -1,12 +1,17 @@
 <template>
-  <section class="bg-white dark:bg-gray-900">
-    <div class="lg:px-6 py-8 px-4 mx-auto max-w-2xl lg:py-16 flex flex-col">
+  <!-- Header -->
+  <section class="bg-color-background">
+    <div class="section-container">
       <PageHeader
-        id="page-header"
-        pageTitle="Adicionar Nova Música"
-        pageDescription="Envie uma nova música para a comunidade."
+        pageTitle="Envio de Música"
+        pageDescription="Envie músicas individualmente para a comunidade. Compartilhe suas
+            músicas com a comunidade."
       />
+    </div>
+  </section>
 
+  <section class="bg-color-background-alternative">
+    <div class="lg:px-6 py-8 px-4 mx-auto max-w-2xl lg:py-16 flex flex-col">
       <div class="alerts">
         <div
           class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
@@ -262,8 +267,10 @@ onMounted(() => {
 });
 
 const addNewCollection = async () => {
-  collectionStatus.value = collectionThumbStatus.value == "" ? "loading" : "error";
-  collectionErrorMessage.value = collectionThumbStatus.value == "" ? "" : collectionErrorMessage.value;
+  collectionStatus.value =
+    collectionThumbStatus.value == "" ? "loading" : "error";
+  collectionErrorMessage.value =
+    collectionThumbStatus.value == "" ? "" : collectionErrorMessage.value;
 
   const form = document.getElementById("collection-form") as HTMLFormElement;
   form.addEventListener("submit", (e) => {

@@ -46,11 +46,14 @@ export const retriveAllToolsWithCategory = async (): Promise<any[]> => {
   const supabase = supabaseClientUtils();
   let toolsList: object[] = [];
   try {
+    // where tct_active = true
     const tools = await supabase
       .from("too_tools")
       .select(
-        "too_name, too_descricao, too_image_ref, too_url, too_category (tct_id, tct_name, tct_descricao, tct_order)"
-      );
+        "too_name, too_descricao, too_image_ref, too_url, too_category!inner (*)"
+      )
+      .eq("too_category.tct_active", true);
+      
 
     if (tools.data) {
       for (let i = 0; i < tools.data.length; i++) {

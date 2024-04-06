@@ -114,9 +114,12 @@ const searchCollections = () => {
       .toLowerCase()
       .includes(seachCollection.value.toLowerCase());
 
+      // collection.collectionDescription could be null
     let descriptionFilter = collection.collectionDescription
-      .toLowerCase()
-      .includes(seachCollection.value.toLowerCase());
+      ? collection.collectionDescription
+          .toLowerCase()
+          .includes(seachCollection.value.toLowerCase())
+      : false;
 
     return titleFilter || descriptionFilter;
   });

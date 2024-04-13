@@ -10,7 +10,9 @@
   </section>
 
   <!-- Main Content Steps -->
-  <section class="bg-color-background-alternative flex flex-col items-center">
+  <section
+    class="bg-color-background-alternative flex flex-col items-center py-16"
+  >
     <!-- Alerts -->
     <div class="alerts">
       <div
@@ -60,6 +62,7 @@
       </div>
     </div>
 
+    <!-- Initial Step - Step 0 -->
     <div class="step-container bg-color-background" v-if="steps == 0">
       <div class="flex flex-col items-center justify-center">
         <div
@@ -124,7 +127,8 @@
       </div>
     </div>
 
-    <div class="step-container" v-if="steps == 1">
+    <!-- Map Collections | Step 1 -->
+    <div class="step-container bg-color-background" v-if="steps == 1">
       <div class="flex flex-col items-center justify-center">
         <div
           class="flex flex-col items-center justify-center w-full max-w-2xl p-4"
@@ -140,30 +144,38 @@
                 Mapeamento de Músicas e Capas
               </h3>
             </div>
-            <div class="flex items-center">
-              <button
-                class="px-4 py-2 text-sm font-semibold text-white bg-primary-500 rounded-lg"
-                @click="steps = 2"
-              >
-                Próximo
-              </button>
-            </div>
           </div>
           <div class="mt-4">
             <p>
-              Confira o mapeamento das músicas e capas do arquivo compactado.
-              Clique no botão abaixo para mapear as músicas e capas.
+              Confira o mapeamento das músicas e capas do arquivo compactado. E
+              marque as capas correspondentes a cada coletânea, ou selecione a
+              opção "Sem Capa" para coletâneas sem capa.
+            </p>
+
+            <p>
+              "Outros arquivos" encontrados no arquivo compactado serão
+              descartados.
             </p>
 
             <div class="my-4 flex flex-col w-ful items-center">
-              <div class="mapped">
-                <h3 class="text-color-text font-semibold w-full text-center text-xl">Coletâneas Mapeadas Automaticamente</h3>
-                <div class="flex">
+              <div class="mapped" v-if="collectionsMapped.length > 0">
+                <h3
+                  class="text-color-text font-semibold w-full text-center text-xl"
+                >
+                  Coletâneas Mapeadas Automaticamente
+                </h3>
+                <div class="grid md:grid-cols-2">
                   <div
+                    :id="`mapped-${
+                      collection.slja.name
+                        .toLocaleLowerCase()
+                        .replace(/ /g, '-')
+                        .split('.')[0]
+                    }`"
                     class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
                     v-for="collection in collectionsMapped"
                   >
-                    <div class="flex">
+                    <div class="flex flex-col">
                       <div class="card-info text-left w-5/6">
                         <h4
                           class="mb-2 font-bold tracking-tight text-color-text"
@@ -173,64 +185,96 @@
                           </div>
                         </h4>
                       </div>
+                      <button
+                        @click="handleSplitCollection"
+                        to="/collections"
+                        class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+                      >
+                        Dividir
+                        <Icon
+                          name="mdi:call-split"
+                          size="1.25em"
+                          class="ml-2"
+                        />
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="unmapped w-full mt-4">
-                <h3 class="text-color-text font-semibold w-full text-center text-xl">Coletâneas Não Mapeadas</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                <div
-                  class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
-                  v-for="collection in collectionsSljaUnmapped"
+              <div
+                class="unmapped w-full mt-4"
+                v-if="collectionsSljaUnmapped.length > 0"
+              >
+                <h3
+                  class="text-color-text font-semibold w-full text-center text-xl"
                 >
-                  <div class="flex">
-                    <div class="card-info text-left w-5/6">
-                      <h4 class="mb-2 font-bold tracking-tight text-color-text">
-                        <div class="cursor-pointer">
-                          {{ collection.name }}
+                  Coletâneas Não Mapeadas
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                  <div
+                    :id="`unmapped-${
+                      collection.name
+                        .toLocaleLowerCase()
+                        .replace(/ /g, '-')
+                        .split('.')[0]
+                    }`"
+                    class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
+                    v-for="collection in collectionsSljaUnmapped"
+                  >
+                    <div class="flex">
+                      <div class="card-info text-left w-5/6">
+                        <h4
+                          class="mb-2 font-bold tracking-tight text-color-text"
+                        >
+                          <div class="cursor-pointer">
+                            {{ collection.name }}
+                          </div>
+                        </h4>
+                        <!-- add combo box to chose the bmp file correspondente -->
+
+                        <select
+                          class="w-full p-2 border border-primary-300 rounded-lg font-semibold text-color-text my-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                          @change="handleSelectChange"
+                        >
+                          <option value="" selected disabled>
+                            Selecione a Capa
+                          </option>
+                          <option
+                            v-for="bmp in collectionsBmpUnmapped"
+                            :value="bmp.name"
+                            class="font-semibold text-color-text"
+                          >
+                            {{ bmp.name }}
+                          </option>
+                        </select>
+
+                        <div class="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="withoutBmp"
+                            name="withoutBmp"
+                            value="withoutBmp"
+                            @change="handleCheckboxChange"
+                          />
+                          <label
+                            class="text-color-text font-semibold ml-2"
+                            for="withoutBmp"
+                            >Sem Capa</label
+                          >
                         </div>
-                      </h4>
-                      <!-- add combo box to chose the bmp file correspondente -->
-
-                      <select
-                        class="w-full p-2 border border-primary-300 rounded-lg font-semibold text-color-text my-2"
-                      >
-                        <option value="" selected disabled>
-                          Selecione a Capa
-                        </option>
-                        <option
-                          v-for="bmp in collectionsBmpUnmapped"
-                          :value="bmp.name"
-                          class="font-semibold text-color-text"
-                        >
-                          {{ bmp.name }}
-                        </option>
-                      </select>
-
-                      <div class="flex items-center">
-                        <input
-                          type="checkbox"
-                          id="withoutBmp"
-                          name="withoutBmp"
-                          value="withoutBmp"
-                        />
-                        <label
-                          class="text-color-text font-semibold ml-2"
-                          for="withoutBmp"
-                          >Sem Capa</label
-                        >
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              </div>
-
 
               <div class="others mt-4">
-                <h3 class="text-color-text font-semibold w-full text-center text-xl">Outros Arquivos</h3>
+                <h3
+                  class="text-color-text font-semibold w-full text-center text-xl"
+                >
+                  Outros Arquivos
+                </h3>
                 <div
                   class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
                   v-for="collection in otherUnmappedFiles"
@@ -267,6 +311,71 @@
         </div>
       </div>
     </div>
+
+    <!-- Set Additional Info | Step 2 -->
+    <div class="step-container bg-color-background" v-if="steps == 2">
+      <div class="flex flex-col items-center justify-center">
+        <div
+          class="flex flex-col items-center justify-center w-full max-w-3xl p-4"
+        >
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center">
+              <div
+                class="flex items-center justify-center w-8 h-8 bg-primary-500 text-white rounded-full"
+              >
+                <span class="text-sm">1</span>
+              </div>
+              <h3 class="ml-2 text-2xl font-semibold">
+                Envio do Arquivo Compactado
+              </h3>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p>
+              Para enviar músicas em lote, você deve compactar todas as músicas
+              em um único arquivo .zip. Clique no botão abaixo para selecionar o
+              arquivo compactado.
+              <br />
+            </p>
+
+            <p class="mt-4">
+              <strong>Importante:</strong>
+            </p>
+
+            <ul class="text-left px-6 md:px-16 list-disc">
+              <li>
+                Compacte todas as as coletâneas <strong>(.SLJA)</strong> e capas
+                <strong>(.BMP)</strong> em um único arquivo .zip
+              </li>
+              <li>
+                O nome da coletânea deve ser o mesmo da capa. <br />
+                Ex.: maranata.slja e maranata.bmp
+              </li>
+              <li>Demais informações serão preenchidas posteriormente.</li>
+            </ul>
+
+            <div class="mt-4">
+              <input
+                type="file"
+                id="fileCompressed"
+                accept=".zip"
+                @change="handleFileUpload"
+                class="w-full p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+
+            <div class="flex items-center justify-around">
+              <button
+                class="px-4 py-2 text-sm font-semibold text-white bg-primary-500 rounded-lg"
+                @click="verifySteps"
+              >
+                Próximo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -284,7 +393,7 @@ const collectionStatus = ref("");
 const collectionErrorMessage = ref("");
 
 const collectionsMapped: Ref<
-  { slja: JSZip.JSZipObject; bmp: JSZip.JSZipObject }[]
+  { slja: JSZip.JSZipObject; bmp: JSZip.JSZipObject | null }[]
 > = ref([]);
 const collectionsBmpUnmapped: Ref<JSZip.JSZipObject[]> = ref([]);
 const collectionsSljaUnmapped: Ref<JSZip.JSZipObject[]> = ref([]);
@@ -299,6 +408,112 @@ const handleFileUpload = (event: any) => {
     mapCollections(zipFile);
   };
   reader.readAsArrayBuffer(file);
+};
+
+const handleCheckboxChange = (event: any) => {
+  // get parent id
+  const parentId =
+    event.target.parentElement.parentElement.parentElement.parentElement.id;
+  const parentName =
+    event.target.parentElement.parentElement.parentElement.querySelector("h4")
+      ?.textContent;
+
+  //toggle select
+  const select = document
+    .getElementById(parentId)
+    ?.querySelector("select") as HTMLSelectElement;
+  select.disabled = event.target.checked;
+  select.value = "";
+
+  // add to mapped
+  collectionsMapped.value.push({
+    slja: collectionsSljaUnmapped.value.find(
+      (file) => file.name === parentName
+    ) as JSZip.JSZipObject,
+    bmp: null,
+  });
+
+  // remove from unmapped
+  collectionsSljaUnmapped.value = collectionsSljaUnmapped.value.filter(
+    (file) => file.name !== parentName
+  );
+
+  //reset all checks
+  const checks = document.querySelectorAll(
+    "input[type=checkbox]"
+  ) as NodeListOf<HTMLInputElement>;
+  checks.forEach((check) => {
+    check.checked = false;
+  });
+
+  //reset all selects
+  const selects = document.querySelectorAll("select");
+  selects.forEach((select) => {
+    select.value = "";
+    select.disabled = false;
+  });
+};
+
+const handleSelectChange = (event: any) => {
+  // get parent id
+  const parentId = event.target.parentElement.parentElement.parentElement.id;
+  const parentName =
+    event.target.parentElement.parentElement.querySelector("h4")?.textContent;
+
+  // get select value
+  const selectValue = document.getElementById(parentId)?.querySelector("select")
+    ?.value;
+
+  // add to mapped
+  collectionsMapped.value.push({
+    slja: collectionsSljaUnmapped.value.find(
+      (file) => file.name === parentName
+    ) as JSZip.JSZipObject,
+    bmp: collectionsBmpUnmapped.value.find(
+      (file) => file.name === selectValue
+    ) as JSZip.JSZipObject,
+  });
+
+  // remove from unmapped
+  collectionsSljaUnmapped.value = collectionsSljaUnmapped.value.filter(
+    (file) => file.name !== parentName
+  );
+  collectionsBmpUnmapped.value = collectionsBmpUnmapped.value.filter(
+    (file) => file.name !== selectValue
+  );
+
+  //reset all selects
+  const selects = document.querySelectorAll("select");
+  selects.forEach((select) => {
+    select.value = "";
+  });
+};
+
+const handleSplitCollection = (event: any) => {
+  // get parent id
+  const parentName =
+    event.target.parentElement.parentElement.querySelector("h4")?.textContent;
+
+  // get mapped collection
+  const mappedCollection = collectionsMapped.value.find(
+    (collection) => collection.slja.name === parentName
+  );
+
+  // remove from mapped
+  collectionsMapped.value = collectionsMapped.value.filter(
+    (collection) => collection.slja.name !== parentName
+  );
+
+  // add to unmapped
+  collectionsSljaUnmapped.value.push(
+    mappedCollection?.slja as JSZip.JSZipObject
+  );
+
+  mappedCollection?.bmp != null
+    ? collectionsBmpUnmapped.value.push(
+        mappedCollection?.bmp as JSZip.JSZipObject
+      )
+    : null;
 };
 
 const mapCollections = (zipObject: JSZip): void => {
@@ -334,10 +549,13 @@ const mapCollections = (zipObject: JSZip): void => {
   collectionsBmpUnmapped.value = bmpFiles;
   collectionsSljaUnmapped.value = sljaFiles;
   otherUnmappedFiles.value = otherFiles;
-
-  console.log(collectionsMapped.value);
 };
+
+const confirmProceed = ref(false);
+
 const verifySteps = () => {
+  const headerElement = document.getElementById("page-header") as HTMLElement;
+
   switch (steps.value) {
     case 0:
       const file = document.getElementById(
@@ -348,6 +566,7 @@ const verifySteps = () => {
       if (file.files != null && file.files.length === 0) {
         collectionStatus.value = "error";
         collectionErrorMessage.value = "Nenhum arquivo selecionado!";
+        headerElement.scrollIntoView();
         return;
       }
 
@@ -358,18 +577,37 @@ const verifySteps = () => {
       ) {
         collectionStatus.value = "error";
         collectionErrorMessage.value = "Arquivo selecionado não é um .zip!";
+        headerElement.scrollIntoView();
         return;
       }
-
-      collectionErrorMessage.value = "";
-      collectionStatus.value = "";
-
-      console.log();
 
       steps.value = 1;
       break;
     case 1:
-      return "Mapeamento de Músicas e Capas";
+      if (collectionsSljaUnmapped.value.length > 0) {
+        collectionStatus.value = "error";
+        collectionErrorMessage.value = "Mapeie todas as coletâneas!";
+        headerElement.scrollIntoView();
+        return;
+      }
+
+      if (collectionsBmpUnmapped.value.length > 0 && !confirmProceed.value) {
+        collectionStatus.value = "error";
+        collectionErrorMessage.value =
+          "Existem capas não mapeadas! Caso deseje proseguir mesmo assim, clique em Próximo novamente.";
+        headerElement.scrollIntoView();
+        confirmProceed.value = true;
+        return;
+      }
+
+      
+
+      collectionErrorMessage.value = "";
+      collectionStatus.value = "";
+
+      steps.value = 2;
+      confirmProceed.value = false;
+      break;
     case 2:
       return "Mapeamento de Músicas e Capas";
     case 3:

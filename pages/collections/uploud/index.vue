@@ -117,9 +117,9 @@
           </NuxtLink>
         </div>
 
-        <!-- Album -->
+        <!-- Album - Desactivate -->
         <div
-          class="p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col"
+          class="opacity-60 p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col"
         >
           <div
             class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12"
@@ -135,12 +135,13 @@
             de forma organizada.
           </p>
 
-          <NuxtLink
-            to="/collections/uploud/album"
-            class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
+          <!-- to="/collections/uploud/album" -->
+          <div
+            
+            class="cursor-not-allowed inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
           >
             <p>Enviar Álbum</p>
-          </NuxtLink>
+          </div>
         </div>
       </div>
     </div>

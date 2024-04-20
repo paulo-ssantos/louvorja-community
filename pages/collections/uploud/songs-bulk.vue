@@ -323,53 +323,57 @@
               <div
                 class="flex items-center justify-center w-8 h-8 bg-primary-500 text-white rounded-full"
               >
-                <span class="text-sm">1</span>
+                <span class="text-sm">3</span>
               </div>
               <h3 class="ml-2 text-2xl font-semibold">
-                Envio do Arquivo Compactado
+                Adicionar Informações Adicionais
               </h3>
             </div>
           </div>
           <div class="mt-4">
             <p>
-              Para enviar músicas em lote, você deve compactar todas as músicas
-              em um único arquivo .zip. Clique no botão abaixo para selecionar o
-              arquivo compactado.
+              Para finalizar o envio, adicione informações adicionais sobre as
+              coletâneas.
               <br />
             </p>
 
             <p class="mt-4">
-              <strong>Importante:</strong>
+              <strong>Para cada uma, adicione:</strong>
             </p>
 
             <ul class="text-left px-6 md:px-16 list-disc">
-              <li>
-                Compacte todas as as coletâneas <strong>(.SLJA)</strong> e capas
-                <strong>(.BMP)</strong> em um único arquivo .zip
-              </li>
-              <li>
-                O nome da coletânea deve ser o mesmo da capa. <br />
-                Ex.: maranata.slja e maranata.bmp
-              </li>
-              <li>Demais informações serão preenchidas posteriormente.</li>
+              <li>Nome</li>
+              <li>Descrição (Opcional)</li>
+              <li>Categoria</li>
+              <li>Música Referência (Opcional)</li>
             </ul>
 
             <div class="mt-4">
-              <input
-                type="file"
-                id="fileCompressed"
-                accept=".zip"
-                @change="handleFileUpload"
-                class="w-full p-2 border border-gray-300 rounded-lg"
-              />
+              <!-- To each file in collectionsMapped, add a accordion with the fields to fill -->
+
+              <div
+                class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
+                v-for="collection in collectionsMapped"
+              >
+                <div class="cursor-pointer">
+                  <AccordionBulkCollection :collection="collection" :current-collections="collectionsNameMapped" />
+                </div>
+              </div>
             </div>
 
-            <div class="flex items-center justify-around">
+            <div class="flex items-center justify-around mt-8">
               <button
                 class="px-4 py-2 text-sm font-semibold text-white bg-primary-500 rounded-lg"
-                @click="verifySteps"
+                @click="steps--"
               >
-                Próximo
+                Anterior
+              </button>
+
+              <button
+                class="px-4 py-2 text-sm font-semibold text-white bg-primary-500 rounded-lg"
+                @click="addCollectionBulk"
+              >
+                Enviar Coletâneas
               </button>
             </div>
           </div>
@@ -392,9 +396,11 @@ const steps = ref(0);
 const collectionStatus = ref("");
 const collectionErrorMessage = ref("");
 
+
 const collectionsMapped: Ref<
   { slja: JSZip.JSZipObject; bmp: JSZip.JSZipObject | null }[]
 > = ref([]);
+const collectionsNameMapped: Ref<string[]> = ref([]);
 const collectionsBmpUnmapped: Ref<JSZip.JSZipObject[]> = ref([]);
 const collectionsSljaUnmapped: Ref<JSZip.JSZipObject[]> = ref([]);
 const otherUnmappedFiles: Ref<JSZip.JSZipObject[]> = ref([]);
@@ -600,10 +606,12 @@ const verifySteps = () => {
         return;
       }
 
-      
-
       collectionErrorMessage.value = "";
       collectionStatus.value = "";
+
+      collectionsNameMapped.value = collectionsMapped.value.map(
+        (collection) => collection.slja.name.split(".")[0]
+      );
 
       steps.value = 2;
       confirmProceed.value = false;
@@ -615,6 +623,22 @@ const verifySteps = () => {
     default:
       return "Envio do Arquivo Compactado";
   }
+};
+
+
+const addCollectionBulk = () => {
+  const collections = collectionsMapped.value.map((collection) => {
+    return {
+      slja: collection.slja,
+      bmp: collection.bmp,
+      name: "",
+      description: "",
+      category: "",
+      mainVersion: "",
+    };
+  });
+
+  console.log(collections);
 };
 </script>
 

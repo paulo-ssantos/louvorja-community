@@ -9,6 +9,9 @@
     </div>
   </section>
 
+  <!-- Loading Overlay -->
+  <LoadOverlay :control="loading" />
+
   <!-- Main Content Steps -->
   <section
     class="bg-color-background-alternative flex flex-col items-center py-16"
@@ -346,17 +349,131 @@
               <li>Descrição (Opcional)</li>
               <li>Categoria</li>
               <li>Música Referência (Opcional)</li>
+              <li>Tipo da Mídia</li>
             </ul>
 
-            <div class="mt-4">
-              <!-- To each file in collectionsMapped, add a accordion with the fields to fill -->
-
+            <div class="grid grid-cols-1 md:grid-cols-2">
               <div
+                :id="`collection-info-${index}`"
                 class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
-                v-for="collection in collectionsMapped"
+                v-for="(collection, index) in collectionsMapped"
+                :key="index"
               >
-                <div class="cursor-pointer">
-                  <AccordionBulkCollection :collection="collection" :current-collections="collectionsNameMapped" />
+                <div class="flex">
+                  <div class="card-info text-left w-full">
+                    <h4 class="mb-4 font-bold tracking-tight text-color-text">
+                      <div class="cursor-pointer">
+                        {{ collection.slja.name || "Nome da Música" }}
+                      </div>
+                    </h4>
+                    <!-- add combo box to chose the bmp file correspondente -->
+
+                    <div class="col-span-2">
+                      <label
+                        for="name"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Nome da Música</label
+                      >
+                      <input
+                        type="text"
+                        :name="`collection-name-${index}`"
+                        :id="`collection-name-${index}`"
+                        v-model="collection.slja.name"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Nosso Maravilhoso Deus"
+                        required="true"
+                      />
+                    </div>
+
+                    <div class="col-span-2 mt-2">
+                      <label
+                        for="description"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Descrição da Música</label
+                      >
+                      <input
+                        type="text"
+                        :name="`collection-description-${index}`"
+                        :id="`collection-description-${index}`"
+                        :v-model="`collection-description-${index}`"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Nosso Maravilhoso Deus"
+                        required="true"
+                      />
+                    </div>
+
+                    <div class="col-span-2 mt-2">
+                      <label
+                        :for="`collection-category-${index}`"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Categoria da Música</label
+                      >
+                      <select
+                        :id="`collection-category-${index}`"
+                        :name="`collection-category-${index}`"
+                        :v-model="`collection-category-${index}`"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      >
+                        <option
+                          v-for="category in collectionCategories"
+                          key="category"
+                          :value="category.mct_id"
+                        >
+                          {{ category.mct_name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-span-2 mt-2">
+                      <label
+                        :for="`collection-main-version-${index}`"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Música Referência</label
+                      >
+                      <select
+                        :id="`collection-main-version-${index}`"
+                        :name="`collection-main-version-${index}`"
+                        :v-model="`collection-main-version-${index}`"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      >
+                        <option select="true" value="null">
+                          Sem referência relacionada
+                        </option>
+                        <option
+                          v-for="collection in collectionsListFiltered"
+                          v-bind:key="collection"
+                          :value="collection.collectionInfo.msc_id"
+                        >
+                          {{ collection.collectionTitle }} |
+                          {{ collection.collectionInfo.msc_meta.username }}
+                        </option>
+                      </select>
+                      <p
+                        id="helper-text-explanation"
+                        class="mt-2 text-sm text-gray-500 dark:text-gray-400"
+                      >
+                        Marque a referência, caso essa música seja outra versão
+                        (cantada, playback, etc).
+                      </p>
+                    </div>
+
+                    <div>
+                      <label
+                        :for="`media-type-${index}`"
+                        class="block mt-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Tipo de Mídia</label
+                      >
+                      <select
+                        :id="`media-type-${index}`"
+                        :v-model="`media-type-${index}`"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      >
+                        <option value="CA" :selected="true">Cantado</option>
+                        <option value="PL">Playback</option>
+                        <option value="AL">Apenas Letra</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -385,6 +502,11 @@
 
 <script setup lang="ts">
 import JSZip, * as JSzip from "jszip";
+import {
+  retriveAllCollectionsInfo,
+  retrieveMainCollections,
+  retrieveCollectionsCategory,
+} from "~/services/collectionServices";
 
 // Steps for Bulk Uploud
 // * Uploud compressed file
@@ -396,6 +518,17 @@ const steps = ref(0);
 const collectionStatus = ref("");
 const collectionErrorMessage = ref("");
 
+const collectionCategories = ref([]);
+const collectionsListFiltered = ref([]);
+
+const loading = ref(false);
+
+onMounted(() => {
+  console.log("mounted");
+  retriveAllCollectionsInfo().then((collectionsList) => {
+    console.log(collectionsList);
+  });
+});
 
 const collectionsMapped: Ref<
   { slja: JSZip.JSZipObject; bmp: JSZip.JSZipObject | null }[]
@@ -615,6 +748,8 @@ const verifySteps = () => {
 
       steps.value = 2;
       confirmProceed.value = false;
+
+      setCollectionInfoDropdown();
       break;
     case 2:
       return "Mapeamento de Músicas e Capas";
@@ -625,6 +760,13 @@ const verifySteps = () => {
   }
 };
 
+const setCollectionInfoDropdown = async () => {
+  loading.value = true;
+  collectionCategories.value = await retrieveCollectionsCategory();
+  collectionsListFiltered.value = await retrieveMainCollections();
+
+  loading.value = false;
+};
 
 const addCollectionBulk = () => {
   const collections = collectionsMapped.value.map((collection) => {

@@ -355,7 +355,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2">
               <div
                 :id="`collection-info-${index}`"
-                class="p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
+                class="collectionBulk p-4 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all m-2"
                 v-for="(collection, index) in collectionsMapped"
                 :key="index"
               >
@@ -363,7 +363,9 @@
                   <div class="card-info text-left w-full">
                     <h4 class="mb-4 font-bold tracking-tight text-color-text">
                       <div class="cursor-pointer">
-                        {{ collection.slja.name || "Nome da Música" }}
+                        <!-- "`collection-name-${index}`" -->
+                        <!-- {{ collection-name-${index} }} -->
+                        {{ collectionsNameMapped[index] }}
                       </div>
                     </h4>
                     <!-- add combo box to chose the bmp file correspondente -->
@@ -378,7 +380,7 @@
                         type="text"
                         :name="`collection-name-${index}`"
                         :id="`collection-name-${index}`"
-                        v-model="collection.slja.name"
+                        :v-model="`collection-name-${index}`"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="Nosso Maravilhoso Deus"
                         required="true"
@@ -502,10 +504,13 @@
 
 <script setup lang="ts">
 import JSZip, * as JSzip from "jszip";
+import { getCurrentUser } from "~/services/accountServices";
 import {
-  retriveAllCollectionsInfo,
-  retrieveMainCollections,
+  insertNewCollection,
+  insertNewCollectionFiles,
   retrieveCollectionsCategory,
+  retrieveMainCollections,
+  retriveAllCollectionsInfo,
 } from "~/services/collectionServices";
 
 // Steps for Bulk Uploud
@@ -517,16 +522,22 @@ import {
 const steps = ref(0);
 const collectionStatus = ref("");
 const collectionErrorMessage = ref("");
+const collectionThumbStatus = ref("");
 
-const collectionCategories = ref([]);
-const collectionsListFiltered = ref([]);
+const collectionCategories: Ref<any[]> = ref([]);
+const collectionsListFiltered: Ref<any[]> = ref([]);
+const allCollections: Ref<any[]> = ref([]);
+
+const user = await getCurrentUser();
+const username =
+  user.data.user != null ? user.data.user.user_metadata.username : null;
 
 const loading = ref(false);
 
 onMounted(() => {
   console.log("mounted");
   retriveAllCollectionsInfo().then((collectionsList) => {
-    console.log(collectionsList);
+    allCollections.value = collectionsList;
   });
 });
 
@@ -762,25 +773,154 @@ const verifySteps = () => {
 
 const setCollectionInfoDropdown = async () => {
   loading.value = true;
+
   collectionCategories.value = await retrieveCollectionsCategory();
   collectionsListFiltered.value = await retrieveMainCollections();
 
   loading.value = false;
 };
 
-const addCollectionBulk = () => {
-  const collections = collectionsMapped.value.map((collection) => {
-    return {
-      slja: collection.slja,
-      bmp: collection.bmp,
-      name: "",
-      description: "",
-      category: "",
-      mainVersion: "",
+const addCollectionBulk = async () => {
+  collectionStatus.value =
+    collectionThumbStatus.value == "" ? "loading" : "error";
+  collectionErrorMessage.value =
+    collectionThumbStatus.value == "" ? "" : collectionErrorMessage.value;
+  loading.value = true;
+
+  const headerElement = document.getElementById("page-header") as HTMLElement;
+
+  const collectionsObjects = document.querySelectorAll(".collectionBulk");
+
+  collectionsObjects.forEach(async (collection, index) => {
+    const collectionName = collection.querySelector(
+      `#collection-name-${index}`
+    ) as HTMLInputElement;
+    const collectionDescription = collection.querySelector(
+      `#collection-description-${index}`
+    ) as HTMLInputElement;
+    const collectionCategory = collection.querySelector(
+      `#collection-category-${index}`
+    ) as HTMLSelectElement;
+    const collectionMainVersion = collection.querySelector(
+      `#collection-main-version-${index}`
+    ) as HTMLSelectElement;
+    const collectionMediaType = collection.querySelector(
+      `#media-type-${index}`
+    ) as HTMLSelectElement;
+
+    const imageRef = imageRefGenerate();
+
+    const collectionSLJAFile = collectionsMapped.value[index].slja;
+
+    const collectionThumbFile =
+      collectionsMapped.value[index] != null
+        ? collectionsMapped.value[index].bmp
+        : null;
+
+    const collectionIntegrity =
+      `${collectionName.value}-${collectionCategory.value}-${collectionMediaType.value}`
+        .toLocaleLowerCase()
+        .replace(/ /g, "-");
+
+    if (await checkIntegrity(collectionIntegrity, allCollections.value)) {
+      collectionStatus.value = "error";
+      collectionErrorMessage.value = "Essa música já existe na base de dados.";
+      headerElement.scrollIntoView();
+      return;
+    }
+
+    const collectionInfo = {
+      name: collectionName.value,
+      description: collectionDescription.value,
+      category: collectionCategory.value,
+      meta: {
+        media: collectionMediaType.value,
+        username: username,
+        integrity: collectionIntegrity,
+      },
+      main_ref:
+        collectionMainVersion.value == "null"
+          ? null
+          : collectionMainVersion.value,
+      files_ref: imageRef,
     };
+
+    const collectionInsert = await insertNewCollection(collectionInfo);
+
+    console.log(collectionInfo);
+    console.log(collectionInsert);
+
+    let collectionFileInsert = null;
+
+    if (collectionInsert.data) {
+      if (checkFile(collectionSLJAFile)) {
+        let sljaFile = await collectionSLJAFile.async("blob");
+        let sljaFileData = new FormData();
+        sljaFileData.append("file", sljaFile, collectionSLJAFile.name);
+        sljaFileData.append("collection_id", collectionInsert.data.msc_id);
+        sljaFileData.append("type", "slja");
+
+        if (checkFile(collectionThumbFile) && collectionThumbFile != null) {
+          let bmpFile = await collectionThumbFile.async("blob");
+          let bmpFileData = new FormData();
+          bmpFileData.append("file", bmpFile, collectionThumbFile?.name);
+          bmpFileData.append("collection_id", collectionInsert.data.msc_id);
+          bmpFileData.append("type", "bmp");
+
+          collectionFileInsert = await insertNewCollectionFiles(
+            collectionInfo,
+            sljaFileData,
+            bmpFileData
+          );
+        } else {
+          collectionFileInsert = await insertNewCollectionFiles(
+            collectionInfo,
+            sljaFileData
+          );
+        }
+      }
+    }
   });
 
-  console.log(collections);
+  // if (
+  //     (await collectionInsert.data) &&
+  //     (await collectionFileInsert.sljaFileResponse.data)
+  //   ) {
+  //     form.reset();
+  //     collectionStatus.value = "success";
+  //     headerElement.scrollIntoView();
+  //   } else {
+  //     collectionStatus.value = "error";
+  //     collectionErrorMessage.value =
+  //       collectionErrorMessage.value == ""
+  //         ? "Verifique as informações inseridas."
+  //         : collectionErrorMessage.value;
+  //     headerElement.scrollIntoView();
+  //   }
+  // } else {
+  //   headerElement.scrollIntoView();
+  // }
+
+  loading.value = false;
+  collectionStatus.value = "success";
+  headerElement.scrollIntoView();
+};
+
+const checkFile = (file: JSZip.JSZipObject | null) => {
+  if (file == null) {
+    return false;
+  }
+
+  return true;
+};
+
+const checkIntegrity = async (integrity: string, collectionsList: any) => {
+  const integrityCheck = collectionsList.filter(
+    (collection: any) =>
+      collection.collectionInfo.msc_meta.integrity == integrity
+  );
+
+  return integrityCheck.length > 0 ? true : false;
 };
 </script>
 

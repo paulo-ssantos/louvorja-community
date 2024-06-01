@@ -363,9 +363,7 @@
                   <div class="card-info text-left w-full">
                     <h4 class="mb-4 font-bold tracking-tight text-color-text">
                       <div class="cursor-pointer">
-                        <!-- "`collection-name-${index}`" -->
-                        <!-- {{ collection-name-${index} }} -->
-                        {{ collectionsNameMapped[index] }}
+                        {{ collection.slja.name }}
                       </div>
                     </h4>
                     <!-- add combo box to chose the bmp file correspondente -->
@@ -847,11 +845,6 @@ const addCollectionBulk = async () => {
 
     const collectionInsert = await insertNewCollection(collectionInfo);
 
-    console.log(collectionInfo);
-    console.log(collectionInsert);
-
-    let collectionFileInsert = null;
-
     if (collectionInsert.data) {
       if (checkFile(collectionSLJAFile)) {
         let sljaFile = await collectionSLJAFile.async("blob");
@@ -867,43 +860,42 @@ const addCollectionBulk = async () => {
           bmpFileData.append("collection_id", collectionInsert.data.msc_id);
           bmpFileData.append("type", "bmp");
 
-          collectionFileInsert = await insertNewCollectionFiles(
+          const response = await insertNewCollectionFiles(
             collectionInfo,
             sljaFileData,
             bmpFileData
           );
+
+          if(response.sljaFileResponse.error == null && response.thumbFileResponse.error == null) {
+            loading.value = false;
+            collectionStatus.value = "success";
+            headerElement.scrollIntoView();
+          } else {
+            loading.value = false;
+            collectionStatus.value = "error";
+            collectionErrorMessage.value = "Verifique as informações inseridas.";
+            headerElement.scrollIntoView();
+          }
         } else {
-          collectionFileInsert = await insertNewCollectionFiles(
+          const response = await insertNewCollectionFiles(
             collectionInfo,
             sljaFileData
           );
+
+          if(response.sljaFileResponse.error == null) {
+            loading.value = false;
+            collectionStatus.value = "success";
+            headerElement.scrollIntoView();
+          } else {
+            loading.value = false;
+            collectionStatus.value = "error";
+            collectionErrorMessage.value = "Verifique as informações inseridas.";
+            headerElement.scrollIntoView();
+            }
         }
       }
     }
   });
-
-  // if (
-  //     (await collectionInsert.data) &&
-  //     (await collectionFileInsert.sljaFileResponse.data)
-  //   ) {
-  //     form.reset();
-  //     collectionStatus.value = "success";
-  //     headerElement.scrollIntoView();
-  //   } else {
-  //     collectionStatus.value = "error";
-  //     collectionErrorMessage.value =
-  //       collectionErrorMessage.value == ""
-  //         ? "Verifique as informações inseridas."
-  //         : collectionErrorMessage.value;
-  //     headerElement.scrollIntoView();
-  //   }
-  // } else {
-  //   headerElement.scrollIntoView();
-  // }
-
-  loading.value = false;
-  collectionStatus.value = "success";
-  headerElement.scrollIntoView();
 };
 
 const checkFile = (file: JSZip.JSZipObject | null) => {

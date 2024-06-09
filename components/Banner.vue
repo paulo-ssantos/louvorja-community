@@ -1,17 +1,15 @@
 <template>
   <div
     id="sticky-banner"
-    class="top-0 start-0 z-50 flex justify-between w-full p-4 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+    class="top-0 start-0 z-50 flex justify-between w-full p-4 border-b border-gray-200 bg-gray-50"
   >
     <div class="flex items-center mx-auto">
-      <p
-        class="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400"
-      >
+      <p class="flex items-center text-sm font-normal text-gray-500">
         <span
-          class="inline-flex p-1 me-3 bg-gray-200 rounded-full dark:bg-gray-600 w-6 h-6 items-center justify-center flex-shrink-0"
+          class="inline-flex p-1 me-3 bg-gray-200 rounded-full w-6 h-6 items-center justify-center flex-shrink-0"
         >
           <svg
-            class="w-3 h-3 text-gray-500 dark:text-gray-400"
+            class="w-3 h-3 text-gray-500"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -26,9 +24,9 @@
         <span
           >{{ mainText }}
           <a
-          v-if="linkText && linkUrl"
-            :href=linkUrl
-            class="inline font-medium text-blue-600 underline dark:text-blue-500 underline-offset-2 decoration-600 dark:decoration-500 decoration-solid hover:no-underline"
+            v-if="linkText && linkUrl"
+            :href="linkUrl"
+            class="inline font-medium text-blue-600 underline underline-offset-2 decoration-600 decoration-solid hover:no-underline"
             >{{ linkText }}</a
           ></span
         >
@@ -38,7 +36,7 @@
       <button
         data-dismiss-target="#sticky-banner"
         type="button"
-        class="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
+        class="flex-shrink-0 inline-flex justify-center w-7 h-7 items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5"
       >
         <svg
           class="w-3 h-3"
@@ -63,10 +61,10 @@
 
 <script setup lang="ts">
 defineProps({
-    mainText: String,
-    linkText: String || null,
-    linkUrl: String || null,
-})
+  mainText: String,
+  linkText: String || null,
+  linkUrl: String || null,
+});
 </script>
 
 <style lang="scss" scoped></style>

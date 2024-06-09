@@ -81,7 +81,7 @@
           </div>
           <h3 class="mb-2 text-xl font-bold">Ver Todas as Coletâneas</h3>
           <p class="text-color-text-muted-75 text-center">
-            Acesse todas as coletâneas disponíveis na plataforma. Use filtros e
+            Acesse todas as coletâneas compartilhas e disponíveis na plataforma. Use filtros e
             pesquise por músicas específicas.
           </p>
 
@@ -105,16 +105,16 @@
               class="w-8 h-8 text-primary-600 lg:w-6 lg:h-6"
             />
           </div>
-          <h3 class="mb-2 text-xl font-bold">Ver Coletânea por Categoria</h3>
+          <h3 class="mb-2 text-xl font-bold">Ver Coletânea por Evento</h3>
           <p class="text-color-text-muted-75 text-center">
-            Acesse os álbuns disponíveis na plataforma, filtrando por categoria.
+            Acesse as coletâneas mais utilizadas, separadas por eventos próximos, como semana santa, natal e semanas de oração.
           </p>
 
           <!-- to="/collections/uploud/album" -->
           <div
             class="cursor-not-allowed inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
           >
-            <p>Ver por Categoria</p>
+            <p>Ver por Eventos</p>
           </div>
         </div>
 

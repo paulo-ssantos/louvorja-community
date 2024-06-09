@@ -6,11 +6,9 @@
         pageDescription="Aqui você pode gerenciar suas coleções."
       />
 
-
-
       <div
         v-if="collectionsList.length > 0"
-        class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+        class="bg-color-background relative shadow-md sm:rounded-lg overflow-hidden"
       >
         <div
           class="flex w-full flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
@@ -24,7 +22,7 @@
                 >
                   <svg
                     aria-hidden="true"
-                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                    class="w-5 h-5 text-gray-500"
                     fill="currentColor"
                     viewbox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +40,7 @@
                   v-model="seachCollection"
                   @change="searchCollections"
                   placeholder="Procurar Coletâneas"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                 />
               </div>
             </form>
@@ -54,7 +52,7 @@
             <NuxtLink to="/collections/uploud">
               <button
                 type="button"
-                class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none"
               >
                 <svg
                   class="h-3.5 w-3.5 mr-1.5 -ml-1"
@@ -75,12 +73,8 @@
           </div>
         </div>
         <div class="overflow-x-auto">
-          <table
-            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-          >
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-            >
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th scope="col" class="px-4 py-4">Música</th>
                 <th scope="col" class="px-4 py-3">Categoria</th>
@@ -126,19 +120,17 @@
           </svg>
 
           <h1
-            class="mb-4 text-2xl font-bold tracking-tight leading-none text-gray-900 lg:mb-6 dark:text-white"
+            class="mb-4 text-2xl font-bold tracking-tight leading-none text-gray-900 lg:mb-6"
           >
             Você Ainda Não Tem Contribuições
           </h1>
-          <p
-            class="font-light text-gray-500 md:text-lg xl:text-xl dark:text-gray-400"
-          >
+          <p class="font-light text-gray-500 md:text-lg xl:text-xl">
             Adicione algumas músicas para poder visualizar essa página
           </p>
           <NuxtLink to="/collections/uploud">
             <button
               type="button"
-              class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 mt-4"
+              class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none mt-4"
             >
               Adicionar Nova
             </button>
@@ -148,7 +140,6 @@
     </div>
   </section>
   <!-- End block -->
-
 </template>
 
 <script setup lang="ts">
@@ -168,10 +159,7 @@ useSeoMeta({
   ogDescription: "Gerencie suas contribuições para com a comunidade.",
 });
 
-import {
-  retriveCollectionInfoFromUser,
-} from "~/services/collectionServices";
-
+import { retriveCollectionInfoFromUser } from "~/services/collectionServices";
 
 let collectionsListOrigin: any[] = [];
 
@@ -182,9 +170,7 @@ await retriveCollectionInfoFromUser().then((collections) => {
   collectionsList.value = collections;
 });
 
-
 const seachCollection = ref("");
-
 
 const searchCollections = () => {
   collectionsList.value = collectionsListOrigin.filter((collection) => {
@@ -199,8 +185,6 @@ const searchCollections = () => {
 };
 
 watch(seachCollection, searchCollections);
-
-
 </script>
 
 <style lang="scss" scoped></style>

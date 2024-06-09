@@ -19,7 +19,7 @@
     <!-- Alerts -->
     <div class="alerts">
       <div
-        class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+        class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50"
         role="alert"
         v-if="collectionStatus == 'success'"
       >
@@ -42,7 +42,7 @@
       </div>
 
       <div
-        class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+        class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50"
         role="alert"
         v-if="collectionStatus == 'error'"
       >
@@ -371,7 +371,7 @@
                     <div class="col-span-2">
                       <label
                         for="name"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        class="block mb-2 text-sm font-medium text-gray-900"
                         >Nome da Música</label
                       >
                       <input
@@ -379,7 +379,7 @@
                         :name="`collection-name-${index}`"
                         :id="`collection-name-${index}`"
                         :v-model="`collection-name-${index}`"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         placeholder="Nosso Maravilhoso Deus"
                         required="true"
                       />
@@ -388,7 +388,7 @@
                     <div class="col-span-2 mt-2">
                       <label
                         for="description"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        class="block mb-2 text-sm font-medium text-gray-900"
                         >Descrição da Música</label
                       >
                       <input
@@ -396,7 +396,7 @@
                         :name="`collection-description-${index}`"
                         :id="`collection-description-${index}`"
                         :v-model="`collection-description-${index}`"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                         placeholder="Nosso Maravilhoso Deus"
                         required="true"
                       />
@@ -405,14 +405,14 @@
                     <div class="col-span-2 mt-2">
                       <label
                         :for="`collection-category-${index}`"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        class="block mb-2 text-sm font-medium text-gray-900"
                         >Categoria da Música</label
                       >
                       <select
                         :id="`collection-category-${index}`"
                         :name="`collection-category-${index}`"
                         :v-model="`collection-category-${index}`"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                       >
                         <option
                           v-for="category in collectionCategories"
@@ -427,14 +427,14 @@
                     <div class="col-span-2 mt-2">
                       <label
                         :for="`collection-main-version-${index}`"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        class="block mb-2 text-sm font-medium text-gray-900"
                         >Música Referência</label
                       >
                       <select
                         :id="`collection-main-version-${index}`"
                         :name="`collection-main-version-${index}`"
                         :v-model="`collection-main-version-${index}`"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                       >
                         <option select="true" value="null">
                           Sem referência relacionada
@@ -450,7 +450,7 @@
                       </select>
                       <p
                         id="helper-text-explanation"
-                        class="mt-2 text-sm text-gray-500 dark:text-gray-400"
+                        class="mt-2 text-sm text-gray-500"
                       >
                         Marque a referência, caso essa música seja outra versão
                         (cantada, playback, etc).
@@ -460,13 +460,13 @@
                     <div>
                       <label
                         :for="`media-type-${index}`"
-                        class="block mt-2 text-sm font-medium text-gray-900 dark:text-white"
+                        class="block mt-2 text-sm font-medium text-gray-900"
                         >Tipo de Mídia</label
                       >
                       <select
                         :id="`media-type-${index}`"
                         :v-model="`media-type-${index}`"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                       >
                         <option value="CA" :selected="true">Cantado</option>
                         <option value="PL">Playback</option>
@@ -866,14 +866,18 @@ const addCollectionBulk = async () => {
             bmpFileData
           );
 
-          if(response.sljaFileResponse.error == null && response.thumbFileResponse.error == null) {
+          if (
+            response.sljaFileResponse.error == null &&
+            response.thumbFileResponse.error == null
+          ) {
             loading.value = false;
             collectionStatus.value = "success";
             headerElement.scrollIntoView();
           } else {
             loading.value = false;
             collectionStatus.value = "error";
-            collectionErrorMessage.value = "Verifique as informações inseridas.";
+            collectionErrorMessage.value =
+              "Verifique as informações inseridas.";
             headerElement.scrollIntoView();
           }
         } else {
@@ -882,16 +886,17 @@ const addCollectionBulk = async () => {
             sljaFileData
           );
 
-          if(response.sljaFileResponse.error == null) {
+          if (response.sljaFileResponse.error == null) {
             loading.value = false;
             collectionStatus.value = "success";
             headerElement.scrollIntoView();
           } else {
             loading.value = false;
             collectionStatus.value = "error";
-            collectionErrorMessage.value = "Verifique as informações inseridas.";
+            collectionErrorMessage.value =
+              "Verifique as informações inseridas.";
             headerElement.scrollIntoView();
-            }
+          }
         }
       }
     }

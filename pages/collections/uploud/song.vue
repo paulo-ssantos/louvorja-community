@@ -14,7 +14,7 @@
     <div class="lg:px-6 py-8 px-4 mx-auto max-w-2xl lg:py-16 flex flex-col">
       <div class="alerts">
         <div
-          class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+          class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50"
           role="alert"
           v-if="collectionStatus == 'success'"
         >
@@ -37,7 +37,7 @@
         </div>
 
         <div
-          class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+          class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50"
           role="alert"
           v-if="collectionStatus == 'error'"
         >
@@ -65,7 +65,7 @@
           <div class="col-span-2">
             <label
               for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Nome da Música</label
             >
             <input
@@ -74,7 +74,7 @@
               id="name"
               v-model="name"
               :on-change="setTitle()"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               placeholder="Nosso Maravilhoso Deus"
               required="true"
             />
@@ -82,7 +82,7 @@
           <div class="col-span-2">
             <label
               for="description"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Descrição</label
             >
             <textarea
@@ -90,20 +90,20 @@
               name="description"
               v-model="description"
               rows="3"
-              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Usado em momentos de doxologia"
             ></textarea>
           </div>
           <div class="w-full col-span-2">
             <label
               for="main-version"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Versão de outra música?</label
             >
             <select
               id="main-version"
               v-model="mainVersion"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               <option select="true" value="null">
                 Sem referência relacionada
@@ -117,10 +117,7 @@
                 {{ collection.collectionInfo.msc_meta.username }}
               </option>
             </select>
-            <p
-              id="helper-text-explanation"
-              class="mt-2 text-sm text-gray-500 dark:text-gray-400"
-            >
+            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500">
               Marque a referência, caso essa música seja outra versão (cantada,
               playback, etc).
             </p>
@@ -128,13 +125,13 @@
           <div>
             <label
               for="category"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Categoria</label
             >
             <select
               id="category"
               v-model="category"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               <option
                 v-for="category in collectionCategories"
@@ -148,13 +145,13 @@
           <div>
             <label
               for="media-type"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Tipo de Mídia</label
             >
             <select
               id="media-type"
               v-model="mediaType"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
             >
               <option value="CA">Cantado</option>
               <option value="PL">Playback</option>
@@ -164,12 +161,12 @@
 
           <div class="col-span-2">
             <label
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               for="file_input"
               >Upload Arquivo SLJA</label
             >
             <input
-              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
               aria-describedby="file_input_help"
               id="file_input"
               name="file_input"
@@ -177,39 +174,33 @@
               accept=".slja"
               required="true"
             />
-            <p
-              class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-              id="file_input_help"
-            >
+            <p class="mt-1 text-sm text-gray-500" id="file_input_help">
               Apenas arquivo .slja é aceito.
             </p>
           </div>
 
           <div class="col-span-2">
             <label
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               for="file_input"
               >Upload Capa da Coletânea</label
             >
             <input
-              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
               aria-describedby="file_input_help"
               id="file_input_cover"
               name="file_input_cover"
               type="file"
               accept="image/bmp"
             />
-            <p
-              class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-              id="file_input_help"
-            >
+            <p class="mt-1 text-sm text-gray-500" id="file_input_help">
               Apenas de imagem .bmp é aceito.
             </p>
           </div>
         </div>
         <button
           type="submit"
-          class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+          class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
           @click="addNewCollection"
         >
           Adiconar Música
@@ -225,9 +216,9 @@ definePageMeta({
 });
 
 import {
-  retrieveCollectionsCategory,
   insertNewCollection,
   insertNewCollectionFiles,
+  retrieveCollectionsCategory,
   retriveAllCollectionsInfo,
 } from "~/services/collectionServices";
 

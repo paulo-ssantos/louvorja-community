@@ -1,8 +1,8 @@
 <template>
-  <tr :id="$props.collectionRef" class="border-b dark:border-gray-700">
+  <tr :id="$props.collectionRef" class="border-b">
     <th
       scope="row"
-      class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
     >
       {{ collectionTitle }}
     </th>
@@ -15,15 +15,15 @@
         collectionInfo?.msc_meta?.media == "PL"
           ? "Playback"
           : collectionInfo?.msc_meta?.media == "CA"
-          ? "Cantado"
-          : "Apenas Letra"
+            ? "Cantado"
+            : "Apenas Letra"
       }}
     </td>
     <td class="px-4 py-3 flex items-center justify-end">
       <button
         type="button"
         @click="editCollection"
-        class="flex w-full justify-center items-center py-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200"
+        class="flex w-full justify-center items-center py-2 px-2 hover:bg-gray-100 text-gray-700"
       >
         <svg
           class="w-5 h-5"
@@ -47,7 +47,7 @@
         type="button"
         :data-modal-target="`deleteModal-${collectionRef}`"
         :data-modal-toggle="`deleteModal-${collectionRef}`"
-        class="flex w-full justify-center items-center py-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400"
+        class="flex w-full justify-center items-center py-2 px-2 hover:bg-gray-100 text-red-500"
       >
         <svg
           class="w-5 h-5"
@@ -67,8 +67,8 @@
     </td>
   </tr>
 
-    <!-- Delete modal -->
-    <div
+  <!-- Delete modal -->
+  <div
     :id="`deleteModal-${collectionRef}`"
     tabindex="-1"
     aria-hidden="true"
@@ -78,11 +78,11 @@
       <!-- Modal content -->
       <div
         id="modalContent"
-        class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+        class="relative p-4 text-center bg-color-background rounded-lg shadow sm:p-5"
       >
         <button
           type="button"
-          class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
           :data-modal-toggle="`deleteModal-${collectionRef}`"
         >
           <svg
@@ -101,7 +101,7 @@
           <span class="sr-only">Fechar</span>
         </button>
         <svg
-          class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+          class="text-gray-400 w-11 h-11 mb-3.5 mx-auto"
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -113,7 +113,7 @@
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="mb-4 text-gray-500 dark:text-gray-300">
+        <p class="mb-4 text-gray-500">
           Tem certeza que deseja excluir a música
           <span class="font-semibold">{{ collectionTitle }}</span
           >?
@@ -122,13 +122,13 @@
           <button
             :data-modal-toggle="`deleteModal-${collectionRef}`"
             type="button"
-            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            class="py-2 px-3 text-sm font-medium text-gray-500 bg-color-background rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
           >
             Não, cancelar
           </button>
           <button
             type="submit"
-            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300"
             @click="deleteCollection"
           >
             Sim, excluir
@@ -143,7 +143,7 @@
     >
       <svg
         aria-hidden="true"
-        class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        class="w-8 h-8 text-gray-200 animate-spin fill-blue-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -173,8 +173,11 @@ const props = defineProps({
   collectionInfo: Object,
 });
 
-import { retrieveCollectionsCategory, deleteCollectionByRef } from "~/services/collectionServices";
 import { initFlowbite } from "flowbite";
+import {
+  deleteCollectionByRef,
+  retrieveCollectionsCategory,
+} from "~/services/collectionServices";
 
 const router = useRouter();
 
@@ -198,7 +201,7 @@ const selectedCollectionTitle = ref("");
 
 onMounted(() => {
   initFlowbite();
-  
+
   const deleteModalToggles = document.querySelectorAll(
     `[data-modal-target='deleteModal-${props.collectionRef}']`
   );
@@ -211,7 +214,9 @@ onMounted(() => {
   });
 });
 const deleteCollection = async () => {
-  const deleteModal = document.querySelector(`#deleteModal-${props.collectionRef}`) as HTMLElement;
+  const deleteModal = document.querySelector(
+    `#deleteModal-${props.collectionRef}`
+  ) as HTMLElement;
   const deleteModalContent = document.querySelector(
     `#deleteModal-${props.collectionRef} #modalContent`
   ) as HTMLElement;

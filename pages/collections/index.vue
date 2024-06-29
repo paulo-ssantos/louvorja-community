@@ -1,162 +1,182 @@
 <template>
+  <!-- Header -->
   <section class="bg-color-background">
     <div class="section-container">
       <PageHeader
-        pageTitle="Coletâneas"
-        pageDescription="Aqui você encontra todas as coleções, enviadas pela comunidade, disponíveis para download."
+        pageTitle="Acesse todas as coletâneas do LJA Community"
+        pageDescription="Aqui você pode acessar todas as coletâneas disponíveis na plataforma. Use filtros e pesquise por músicas e albúns."
       />
+    </div>
+  </section>
 
-      <!-- Init Fiter -->
-      <Alerts
-          :collectionStatus="alertStatus"
-          :collectionMainMessage="alertMainMessage || undefined"
-          :collectionAdditionalMessage="
-            alertAdditionalMessage || undefined
-          "
-        />
-
-      <div
-        class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 mb-4 py-4 border-t w-full"
-      >
-        <div class="w-full flex">
-          <form id="filter-form" class="flex items-center md:w-1/2">
-            <label for="simple-search" class="sr-only">Search</label>
-            <div class="relative w-full">
-              <div
-                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-              >
-                <Icon name="mdi:magnify" class="mr-1 w-4 h-4" />
-              </div>
-              <input
-                type="text"
-                id="simple-search"
-                v-model="seachCollection"
-                @change="searchCollections"
-                placeholder="Procurar Coletâneas"
-                class="bg-gray-50 border border-gray-300 text-color-text text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
-              />
-            </div>
-          </form>
-
-          <button
-            type="button"
-            class="flex items-center justify-center text-color-text-inverse bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 ml-2"
-            @click="refreshCollections"
-          >
-            <Icon name="mdi:reload" class="mr-1 w-4 h-4" />
-
-            Recarregar
-          </button>
-
-          <button
-            type="button"
-            v-if="seachCollection"
-            class="flex items-center justify-center text-color-text-inverse bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 ml-2"
-            @click="copySharedLink(seachCollection)"
-          >
-            <Icon name="mdi:clipboard-search-outline" class="mr-1 w-4 h-4" />
-          </button>
-        </div>
-        <div
-          class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
-        >
-          <NuxtLink to="/collections/uploud">
-            <button
-              type="button"
-              class="flex items-center justify-center text-color-text-inverse bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
-            >
-              <Icon name="mdi:plus" class="mr-1 w-4 h-4" />
-              Adicionar Nova
-            </button>
-          </NuxtLink>
-        </div>
+  <!-- Apresentation and How Use -->
+  <section class="bg-color-background-alternative">
+    <div class="section-container-divided">
+      <div class="font-light text-color-text-muted-75 sm:text-lg">
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-color-text">
+          Como usar a plataforma
+        </h2>
+        <ul>
+          <li class="mb-4">
+            <p class="mb-2 font-bold">Sobre a plataforma</p>
+            <p>
+              A plataforma LJA Community é um espaço para compartilhar músicas e
+              álbuns com a comunidade. Você pode enviar músicas individualmente
+              ou em lote. A comunidade pode acessar e baixar as músicas
+              compartilhadas.
+            </p>
+          </li>
+          <li class="mb-4">
+            <p class="mb-2 font-bold">Como achar sua coletânea?</p>
+            <p>
+              A plataforma é gratuita e aberta para todos. Você pode acessar
+              todas as coletâneas disponíveis na plataforma. Use filtros e
+              pesquise por músicas e álbuns.
+            </p>
+          </li>
+        </ul>
       </div>
-
-      <!-- End Filter -->
-
-      <div class="grid gap-8 lg:grid-cols-2">
-        <CardCollection
-          v-for="collection in collectionsList"
-          :key="collection"
-          :collection-title="collection.collectionTitle"
-          :collection-description="collection.collectionDescription"
-          :collection-image="collection.collectionImage"
-          :collection-updated-at="collection.collectionUpdatedAt"
-          :collection-type="collection.collectionType"
-          :collection-ref="collection.collectionRef"
-          :collection-info="collection.collectionInfo"
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <img
+          class="w-full rounded-lg object-cover lg:h-full"
+          src="https://images.unsplash.com/photo-1569926426428-471bfd09906a?q=80&w=1286&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="office content 1"
+        />
+        <img
+          class="mt-4 w-full lg:mt-10 rounded-lg object-cover h-full"
+          src="https://images.unsplash.com/photo-1649437636817-ff86121a83bf?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="office content 2"
         />
       </div>
     </div>
   </section>
+
+  <!-- Switcher -->
+  <section class="bg-color-background">
+    <div class="section-container">
+      <div class="max-w-screen-md mb-8 text-center lg:mb-16">
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-color-text">
+          Como você quer procurar sua coletânea?
+        </h2>
+        <p class="text-color-text-muted-75 sm:text-xl">
+          Escolha uma das opções abaixo para acessar as coletâneas disponíveis
+          na plataforma.
+        </p>
+      </div>
+
+      <div
+        class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0"
+      >
+        <!-- All Collections -->
+        <div
+          class="p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col col-span-2"
+        >
+          <div
+            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12"
+          >
+            <Icon
+              name="mdi:music-box"
+              class="w-8 h-8 text-primary-600 lg:w-6 lg:h-6"
+            />
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Ver Todas as Coletâneas</h3>
+          <p class="text-color-text-muted-75 text-center">
+            Acesse todas as coletâneas compartilhas e disponíveis na plataforma. Use filtros e
+            pesquise por músicas específicas.
+          </p>
+
+          <NuxtLink
+            to="/collections/all"
+            class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
+          >
+            <p>Ver Todas</p>
+          </NuxtLink>
+        </div>
+
+        <!-- Per Category - Desactivate -->
+        <div
+          class="opacity-60 p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col"
+        >
+          <div
+            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12"
+          >
+            <Icon
+              name="mdi:music-box-multiple"
+              class="w-8 h-8 text-primary-600 lg:w-6 lg:h-6"
+            />
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Ver Coletânea por Evento</h3>
+          <p class="text-color-text-muted-75 text-center">
+            Acesse as coletâneas mais utilizadas, separadas por eventos próximos, como semana santa, natal e semanas de oração.
+          </p>
+
+          <!-- to="/collections/uploud/album" -->
+          <div
+            class="cursor-not-allowed inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
+          >
+            <p>Ver por Eventos</p>
+          </div>
+        </div>
+
+        <!-- Album - Desactivate -->
+        <div
+          class="opacity-60 p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col"
+        >
+          <div
+            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12"
+          >
+            <Icon
+              name="mdi:album"
+              class="w-8 h-8 text-primary-600 lg:w-6 lg:h-6"
+            />
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Ver Álbuns</h3>
+          <p class="text-color-text-muted-75 text-center">
+            Acesse os álbuns disponíveis na plataforma.
+          </p>
+
+          <!-- to="/collections/uploud/album" -->
+          <div
+            class="cursor-not-allowed inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
+          >
+            <p>Ver Álbuns</p>
+          </div>
+        </div>
+
+        <!-- Send new collection -->
+        <div
+          class="p-6 bg-color-background-alternative rounded-lg border-2 border-color-primary-generic border-opacity-50 hover:border-opacity-100 shadow-md hover:shadow-lg hover:shadow-color-primary-generic transition-all items-center flex flex-col col-span-2"
+        >
+          <div
+            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12"
+          >
+            <Icon
+              name="mdi:music-note-plus"
+              class="w-8 h-8 text-primary-600 lg:w-6 lg:h-6"
+            />
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Enviar Nova Coletânea</h3>
+          <p class="text-color-text-muted-75 text-center">
+            Envie uma nova música para a comunidade. Compartilhe suas músicas
+            e salve suas coletâneas personalizadas do LJA na nuvem.
+          </p>
+
+          <NuxtLink
+            to="/collections/uploud"
+            class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 mt-2"
+          >
+            <p>Enviar Agora</p>
+          </NuxtLink>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <FAQ :alternativeBackground="true" />
 </template>
 
-<script setup lang="ts">
-useSeoMeta({
-  title: `Coletâneas`,
-  description:
-    "Encontre todas as coleções, enviadas pela comunidade do Louvor JA, disponíveis para download.",
-});
-
-import { retriveAllCollectionsInfo } from "~/services/collectionServices";
-
-let collectionsListOrigin = await retriveAllCollectionsInfo();
-
-const route = useRoute();
-
-const collectionsList = ref(collectionsListOrigin);
-const seachCollection = ref(route.query.search as string || "");
-
-
-const searchCollections = () => {
-  collectionsList.value = collectionsListOrigin.filter((collection) => {
-    let titleFilter = collection.collectionTitle
-      .toLowerCase()
-      .includes(seachCollection.value.toLowerCase());
-
-    let descriptionFilter = collection.collectionDescription
-      .toLowerCase()
-      .includes(seachCollection.value.toLowerCase());
-
-    return titleFilter || descriptionFilter;
-  });
-
-  if (seachCollection.value === "") {
-    collectionsList.value = collectionsListOrigin;
-  }
-};
-
-if (seachCollection.value) {
-  searchCollections();
-}
-
-watch(seachCollection, searchCollections);
-
-const alertStatus = ref("");
-const alertMainMessage = ref("");
-const alertAdditionalMessage = ref("");
-
-const copySharedLink = (seachCollection: string) => {
-  const url = encodeURI(`${window.location.origin}/collections?search=${seachCollection}`);
-  navigator.clipboard.writeText(url);
-
-  alertStatus.value = "success";
-  alertMainMessage.value = "Link copiado!";
-  alertAdditionalMessage.value = "O link foi copiado para a área de transferência.";
-
-  setTimeout(() => {
-    alertStatus.value = "";
-    alertMainMessage.value = "";
-    alertAdditionalMessage.value = "";
-  }, 3000);
-};
-
-const refreshCollections = async () => {
-  collectionsListOrigin = await retriveAllCollectionsInfo();
-  collectionsList.value = collectionsListOrigin;
-
-  seachCollection.value = "";
-};
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>

@@ -17,6 +17,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vueuse/nuxt": "^10.9.0",
     "flowbite": "^2.3.0",
+    "jszip": "^3.10.1",
     "nuxt": "^3.10.3",
     "nuxt-swiper": "^1.2.2",
     "vue": "^3.4.21",
@@ -24,7 +25,8 @@
   },
   "devDependencies": {
     "@nuxtjs/seo": "^2.0.0-rc.9",
-    "nuxt-icon": "^0.6.9",
+    "nuxt-icon": "^0.6.10",
     "nuxt-typed-router": "^3.6.1"
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

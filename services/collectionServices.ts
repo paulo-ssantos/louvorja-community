@@ -258,6 +258,17 @@ export const retriveAllCollectionsInfo = async (): Promise<any[]> => {
   return collectionInfoList;
 };
 
+export const retrieveMainCollections = async (): Promise<any> => {
+
+  const allCollections = await retriveAllCollectionsInfo();
+
+  const mainCollections = allCollections.filter(
+    (collection) => collection.collectionInfo.msc_main_ref == null
+  );
+
+  return mainCollections;
+}
+
 export const updateCollectionInfo = async (collectionInfo: {
   name: string;
   description?: string | null;
@@ -336,7 +347,7 @@ export const deleteCollectionByRef = async (
     .from("msc_music")
     .delete()
     .eq("msc_files_ref", collectionRef);
-    
+
   // Delete collection files from storage
   await supabase.storage
     .from("slja")

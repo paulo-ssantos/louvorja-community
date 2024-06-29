@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     '@nuxtjs/seo'
   ],
 
-  plugins: ["~/plugins/flowbiteInjection.ts"],
+  plugins: ["~/plugins/flowbiteInjection.ts", "~/plugins/accountCheck.ts", "~/plugins/gAnalyticsInjection.client.ts"],
 
   runtimeConfig: {
     public: {

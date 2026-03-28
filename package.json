@@ -1,0 +1,22 @@
+{
+  "name": "lja-community",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "dev:backend": "turbo run dev --filter=@lja/backend",
+    "dev:frontend": "turbo run dev --filter=@lja/frontend"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
+  }
+}

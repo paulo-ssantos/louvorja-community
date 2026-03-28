@@ -9,6 +9,9 @@ dist/
 .next/
 build/
 
+# Reference
+reference-louvorja-community-previous/
+
 # Environment files
 .env
 .env.local
@@ -31,8 +34,10 @@ yarn-error.log
 
 # Cache
 .cache/
+.turbo/
 
 # Agent configs
 .agent/
 .claude/
 .opencode/
+.serena/

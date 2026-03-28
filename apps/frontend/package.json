@@ -11,8 +11,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@lja/types": "workspace:*",
     "@fission-ai/openspec": "^1.2.0",
+    "@lja/types": "workspace:*",
     "@nuxtjs/supabase": "^2.0.4",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@pinia/nuxt": "^0.11.3",
@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
-    "gsap": "^3.14.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5"

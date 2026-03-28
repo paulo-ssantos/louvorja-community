@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { ArrowLeft, ChevronUp, Download, Star, Trash2 } from 'lucide-vue-next'
+import { ArrowLeft, ChevronUp, Download, Star, Trash2, Music, Calendar, User } from 'lucide-vue-next'
 
 const route = useRoute()
 const user = useSupabaseUser()
@@ -19,7 +17,7 @@ const loading = ref(true)
 const isOwner = computed(() => user.value && collection.value && user.value.id === collection.value.user_id)
 const formattedDate = computed(() => {
   if (!collection.value?.created_at) return ''
-  return new Date(collection.value.created_at).toLocaleDateString('pt-BR')
+  return new Date(collection.value.created_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
 })
 
 async function loadCollection() {
@@ -36,7 +34,7 @@ async function loadCollection() {
       const { data: upvote } = await client.from('collection_upvotes').select('*').eq('collection_id', data.id).eq('user_id', user.value.id).single()
       hasUpvoted.value = !!upvote
     }
-  } catch (e) { console.error('Erro ao carregar coletânea:', e) }
+  } catch {}
   finally { loading.value = false }
 }
 
@@ -52,13 +50,13 @@ async function handleUpvote() {
       collection.value.upvotes = (collection.value.upvotes || 0) + 1
       hasUpvoted.value = true
     }
-  } catch (e) { console.error('Erro ao votar:', e) }
+  } catch {}
 }
 
 async function handleRate(rating: number) {
   if (!user.value) { router.push('/auth/login'); return }
   try {
-    const response = await fetch(`http://localhost:3000/collections/${collection.value.id}/rate`, {
+    const response = await fetch(`http://localhost:3001/collections/${collection.value.id}/rate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: user.value.id, rating }),
@@ -67,7 +65,7 @@ async function handleRate(rating: number) {
     collection.value.rating = result.averageRating
     ratingCount.value = result.count
     userRating.value = rating
-  } catch (e) { console.error('Erro ao avaliar:', e) }
+  } catch {}
 }
 
 async function handleDelete() {
@@ -75,88 +73,145 @@ async function handleDelete() {
   try {
     await client.from('collections').delete().eq('id', collection.value.id)
     router.push('/collections')
-  } catch (e) { console.error('Erro ao excluir:', e) }
+  } catch {}
 }
 
 onMounted(loadCollection)
 </script>
 
 <template>
-  <div class="min-h-screen bg-background">
-    <div class="max-w-4xl mx-auto px-4 py-10">
-      
-      <Button variant="ghost" as-child class="mb-6 -ml-2">
-        <NuxtLink to="/collections">
-          <ArrowLeft class="mr-2 h-4 w-4" /> Voltar para Coletâneas
-        </NuxtLink>
-      </Button>
+  <div class="min-h-screen">
+    <div class="site-container py-10 max-w-4xl">
 
-      <div v-if="loading" class="text-center py-16 text-muted-foreground">Carregando coletânea...</div>
+      <!-- Back -->
+      <NuxtLink
+        to="/collections"
+        class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 group"
+      >
+        <ArrowLeft class="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+        Voltar para Coletâneas
+      </NuxtLink>
 
-      <div v-else-if="!collection" class="text-center py-16">
-        <p class="text-muted-foreground">Coletânea não encontrada.</p>
-        <Button class="mt-4" as-child><NuxtLink to="/collections">Ver Coletâneas</NuxtLink></Button>
+      <!-- Loading -->
+      <div v-if="loading" class="space-y-4">
+        <div class="skeleton h-10 w-2/3 rounded-xl" />
+        <div class="skeleton h-48 rounded-2xl" />
       </div>
 
-      <Card v-else class="p-6 md:p-8 space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
-          <div class="space-y-2 flex-1">
-            <h1 class="text-2xl md:text-3xl font-bold tracking-tight">{{ collection.name }}</h1>
-            <span v-if="collection.category" class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold text-muted-foreground bg-muted/30">
-              {{ collection.category }}
-            </span>
-          </div>
-          <div class="flex flex-col items-center gap-1">
-            <button
-              @click="handleUpvote"
-              class="flex flex-col items-center px-4 py-3 rounded-lg border transition-all"
-              :class="hasUpvoted ? 'bg-primary/10 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'"
-            >
-              <ChevronUp class="h-5 w-5" />
-              <span class="text-lg font-bold leading-none mt-1">{{ collection.upvotes || 0 }}</span>
-            </button>
+      <!-- Not found -->
+      <div v-else-if="!collection" class="flex flex-col items-center py-24 text-center">
+        <p class="font-medium mb-2">Coletânea não encontrada</p>
+        <NuxtLink to="/collections" class="text-sm text-primary hover:underline">Ver todas as coletâneas</NuxtLink>
+      </div>
+
+      <!-- Content -->
+      <div v-else class="animate-fade-up">
+
+        <!-- Hero card -->
+        <div class="rounded-2xl bg-card border border-white/[0.07] overflow-hidden mb-6">
+
+          <!-- Top band -->
+          <div class="h-1.5 bg-gradient-to-r from-primary/80 via-primary to-primary/40" />
+
+          <div class="p-6 md:p-8">
+            <!-- Title + category + upvote -->
+            <div class="flex flex-col sm:flex-row items-start gap-5 mb-6">
+              <div class="flex-1 space-y-3">
+                <div class="flex flex-wrap gap-2 items-center">
+                  <span v-if="collection.category" class="badge-amber badge">{{ collection.category }}</span>
+                </div>
+                <h1 class="font-display text-3xl md:text-4xl font-semibold leading-tight">{{ collection.name }}</h1>
+              </div>
+
+              <!-- Upvote button -->
+              <button
+                class="flex flex-col items-center gap-1 px-5 py-3 rounded-xl border-2 transition-all duration-200 shrink-0"
+                :class="hasUpvoted
+                  ? 'border-primary bg-primary/12 text-primary'
+                  : 'border-white/[0.12] text-muted-foreground hover:border-primary/40 hover:text-foreground'"
+                @click="handleUpvote"
+              >
+                <ChevronUp class="h-5 w-5" />
+                <span class="text-xl font-bold font-display leading-none">{{ collection.upvotes || 0 }}</span>
+                <span class="text-[10px] uppercase tracking-wider">votos</span>
+              </button>
+            </div>
+
+            <!-- Description -->
+            <p v-if="collection.description" class="text-muted-foreground leading-relaxed mb-6">
+              {{ collection.description }}
+            </p>
+
+            <!-- Rating -->
+            <div class="flex flex-wrap items-center gap-4 mb-6">
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-muted-foreground font-medium">Sua avaliação:</span>
+                <div class="flex gap-0.5">
+                  <button
+                    v-for="star in 5"
+                    :key="star"
+                    class="transition-all duration-100 hover:scale-110"
+                    @click="handleRate(star)"
+                  >
+                    <Star
+                      class="h-5 w-5"
+                      :class="star <= userRating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30 hover:text-amber-400/60'"
+                    />
+                  </button>
+                </div>
+              </div>
+              <span v-if="collection.rating" class="text-sm text-muted-foreground">
+                {{ collection.rating.toFixed(1) }} / 5 ({{ ratingCount }} {{ ratingCount === 1 ? 'avaliação' : 'avaliações' }})
+              </span>
+            </div>
+
+            <!-- Meta -->
+            <div class="flex flex-wrap items-center gap-5 py-4 border-y border-white/[0.06] text-sm text-muted-foreground mb-6">
+              <span class="flex items-center gap-1.5">
+                <Music class="h-4 w-4 text-primary/70" />
+                {{ collection.song_count || 0 }} músicas
+              </span>
+              <span class="flex items-center gap-1.5">
+                <User class="h-4 w-4 text-primary/70" />
+                <strong class="text-foreground">{{ authorName }}</strong>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <Calendar class="h-4 w-4 text-primary/70" />
+                {{ formattedDate }}
+              </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a
+                :href="collection.file_url"
+                download
+                class="flex-1 inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
+              >
+                <Download class="h-4 w-4" /> Baixar Coletânea
+              </a>
+              <button
+                v-if="isOwner"
+                class="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive font-semibold text-sm hover:bg-destructive/20 transition-colors"
+                @click="handleDelete"
+              >
+                <Trash2 class="h-4 w-4" /> Excluir
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Rating -->
-        <div class="flex items-center gap-3">
-          <span class="text-sm font-medium">Avaliação:</span>
-          <div class="flex gap-0.5">
-            <button v-for="star in 5" :key="star" @click="handleRate(star)" class="transition-colors">
-              <Star class="h-5 w-5" :class="star <= (userRating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/30 hover:text-yellow-400'" />
-            </button>
-          </div>
-          <span v-if="collection.rating" class="text-sm text-muted-foreground">
-            {{ collection.rating.toFixed(1) }} ({{ ratingCount }} avaliações)
-          </span>
+        <!-- Login nudge -->
+        <div v-if="!user" class="rounded-xl bg-white/[0.03] border border-white/[0.07] p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p class="text-sm text-muted-foreground">Entre para votar e avaliar esta coletânea.</p>
+          <NuxtLink
+            to="/auth/login"
+            class="px-5 py-2 rounded-lg bg-card border border-white/[0.1] text-sm font-medium hover:border-primary/40 transition-colors shrink-0"
+          >
+            Entrar
+          </NuxtLink>
         </div>
-
-        <!-- Description -->
-        <p class="text-muted-foreground leading-relaxed">{{ collection.description }}</p>
-
-        <!-- Meta Row -->
-        <div class="flex flex-wrap items-center justify-between gap-4 py-4 border-y text-sm text-muted-foreground">
-          <div class="flex flex-wrap items-center gap-4">
-            <span>🎵 {{ collection.song_count || 0 }} músicas</span>
-            <span>•</span>
-            <span>Por <strong class="text-foreground">{{ authorName }}</strong></span>
-          </div>
-          <span>{{ formattedDate }}</span>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          <Button class="flex-1 text-base" as-child>
-            <a :href="collection.file_url" download>
-              <Download class="mr-2 h-4 w-4" /> Baixar Coletânea
-            </a>
-          </Button>
-          <Button v-if="isOwner" variant="destructive" @click="handleDelete">
-            <Trash2 class="mr-2 h-4 w-4" /> Excluir
-          </Button>
-        </div>
-      </Card>
+      </div>
     </div>
   </div>
 </template>

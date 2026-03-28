@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Search, ExternalLink, Plus } from 'lucide-vue-next'
+import { Search, ExternalLink, Plus, Wrench } from 'lucide-vue-next'
 
-const user = useSupabaseUser()
 const selectedCategory = ref('')
 const searchQuery = ref('')
 const tools = ref<any[]>([])
 const loading = ref(false)
 
-const API_URL = 'http://localhost:3000'
+const API_URL = 'http://localhost:3001'
 
 const categories = [
+  { value: '', label: 'Todas' },
   { value: 'imagem', label: 'Imagem' },
   { value: 'video', label: 'Vídeo' },
   { value: 'audio', label: 'Áudio' },
@@ -38,11 +35,11 @@ async function fetchTools() {
     const response = await fetch(`${API_URL}/tools`)
     const data = await response.json()
     tools.value = data.data || data
-  } catch (e) { console.error('Falha ao carregar ferramentas:', e) }
+  } catch {}
   finally { loading.value = false }
 }
 
-async function trackClick(toolId: string) {
+async function trackClick(e: Event, toolId: string) {
   try { await fetch(`${API_URL}/tools/${toolId}/click`, { method: 'POST' }) } catch {}
 }
 
@@ -50,73 +47,103 @@ onMounted(fetchTools)
 </script>
 
 <template>
-  <div class="min-h-screen bg-background">
-    <div class="max-w-6xl mx-auto px-4 py-10">
+  <div class="min-h-screen">
+    <div class="site-container py-10">
 
-      <!-- Page Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 mb-10">
         <div>
-          <h1 class="text-3xl font-bold tracking-tight">Ferramentas</h1>
-          <p class="text-muted-foreground mt-1">Recursos curados pela comunidade para facilitar a mídia da sua igreja</p>
+          <h1 class="font-display text-4xl font-semibold tracking-tight mb-1">Ferramentas</h1>
+          <p class="text-muted-foreground text-sm">Recursos curados pela comunidade para a mídia da sua igreja</p>
         </div>
-        <Button as-child>
-          <NuxtLink to="/tools/submit">
-            <Plus class="mr-2 h-4 w-4" /> Indicar Ferramenta
-          </NuxtLink>
-        </Button>
+        <NuxtLink
+          to="/tools/submit"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shrink-0"
+        >
+          <Plus class="h-4 w-4" /> Indicar Ferramenta
+        </NuxtLink>
       </div>
 
-      <!-- Search & Filter -->
-      <div class="flex flex-col sm:flex-row gap-4 mb-8">
-        <div class="relative flex-1">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input v-model="searchQuery" placeholder="Buscar ferramentas..." class="pl-9" />
+      <!-- Search + categories -->
+      <div class="flex flex-col gap-4 mb-8">
+        <div class="relative">
+          <Search class="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Buscar ferramentas..."
+            class="w-full h-11 pl-11 pr-4 rounded-xl bg-card border border-white/[0.08] text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+          />
         </div>
-        <select
-          v-model="selectedCategory"
-          class="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="">Todas as categorias</option>
-          <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
-        </select>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button
+            v-for="cat in categories"
+            :key="cat.value"
+            class="px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all"
+            :class="selectedCategory === cat.value
+              ? 'bg-primary text-primary-foreground border-primary'
+              : 'bg-card border-white/[0.08] text-muted-foreground hover:text-foreground hover:border-white/20'"
+            @click="selectedCategory = cat.value"
+          >
+            {{ cat.label }}
+          </button>
+        </div>
       </div>
 
       <!-- Loading -->
-      <div v-if="loading" class="text-center py-16 text-muted-foreground">Carregando ferramentas...</div>
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-for="i in 6" :key="i" class="skeleton h-40 rounded-xl" />
+      </div>
 
       <!-- Empty -->
-      <div v-else-if="filteredTools.length === 0" class="text-center py-16">
-        <p class="text-muted-foreground mb-4">Nenhuma ferramenta encontrada. Seja o primeiro a indicar!</p>
-        <Button as-child><NuxtLink to="/tools/submit">Indicar Ferramenta</NuxtLink></Button>
+      <div v-else-if="filteredTools.length === 0" class="flex flex-col items-center py-24 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
+          <Wrench class="h-6 w-6 text-muted-foreground" />
+        </div>
+        <p class="font-medium mb-1">Nenhuma ferramenta encontrada</p>
+        <p class="text-sm text-muted-foreground mb-5">Seja o primeiro a indicar uma ferramenta útil para a comunidade.</p>
+        <NuxtLink
+          to="/tools/submit"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
+        >
+          Indicar Ferramenta
+        </NuxtLink>
       </div>
 
       <!-- Grid -->
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger">
+        <div
           v-for="tool in filteredTools"
           :key="tool.id"
-          class="p-6 flex flex-col gap-3 hover:shadow-md hover:border-primary/40 transition-all"
+          class="card-glow flex flex-col rounded-xl bg-card p-5 gap-3"
         >
-          <div class="flex justify-between items-start gap-2">
-            <h3 class="font-semibold text-base leading-tight">{{ tool.name }}</h3>
-            <span v-if="tool.category" class="shrink-0 inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold text-muted-foreground bg-muted/30">
-              {{ tool.category }}
-            </span>
+          <!-- Icon + name + badge -->
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                <Wrench class="h-4 w-4 text-primary" />
+              </div>
+              <h3 class="font-medium text-sm leading-snug">{{ tool.name }}</h3>
+            </div>
+            <span v-if="tool.category" class="badge shrink-0">{{ tool.category }}</span>
           </div>
-          <p class="text-sm text-muted-foreground flex-1">{{ tool.description }}</p>
-          <div class="flex items-center justify-between pt-2 border-t border-border/50 text-sm">
+
+          <p class="text-sm text-muted-foreground flex-1 leading-relaxed line-clamp-3">{{ tool.description }}</p>
+
+          <!-- Footer -->
+          <div class="flex items-center justify-between pt-3 border-t border-white/[0.06]">
             <a
               :href="tool.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-1 text-primary hover:underline font-medium"
-              @click="trackClick(tool.id)"
+              class="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              @click="trackClick($event, tool.id)"
             >
               Acessar <ExternalLink class="h-3.5 w-3.5" />
             </a>
-            <span class="text-muted-foreground text-xs">por {{ tool.author || 'Comunidade' }}</span>
+            <span class="text-xs text-muted-foreground">por {{ tool.author || 'Comunidade' }}</span>
           </div>
-        </Card>
+        </div>
       </div>
 
     </div>

@@ -24,8 +24,9 @@ async function bootstrap() {
     credentials: true,
   });
   
-  await app.listen(3000);
-  console.log('🚀 Server running on http://localhost:3000');
-  console.log('📚 API Docs at http://localhost:3000/api/docs');
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port);
+  console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`📚 API Docs at http://localhost:${port}/api/docs`);
 }
 bootstrap();

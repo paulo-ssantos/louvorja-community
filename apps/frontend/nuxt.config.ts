@@ -13,8 +13,8 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      Inter: [400, 500, 600, 700],
-      Outfit: [500, 600, 700, 800],
+      Fraunces: { wght: '300..900', ital: '1' },
+      'DM+Sans': [300, 400, 500, 600],
     },
     display: 'swap',
   },

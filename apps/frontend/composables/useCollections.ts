@@ -1,7 +1,7 @@
 // composables/useCollections.ts
 // Fetches collections from the NestJS API with graceful fallback
 
-const API_URL = 'http://localhost:3000'
+const API_URL = 'http://localhost:3001'
 
 export interface Collection {
     id: string | number
